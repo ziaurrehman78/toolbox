@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="ToolBox - Your ultimate collection of free online tools for productivity, fun, and creativity">
-    <meta name="keywords" content="online tools, calculators, converters, generators, games, utilities, productivity, free toolbox">
+    <meta name="description" content="ToolBox - Free online tools including calculators, converters, generators, games, and productivity apps">
+    <meta name="keywords" content="online tools, calculators, converters, generators, games, utilities, productivity, free tools">
     <meta name="author" content="Your Name">
-    <meta property="og:title" content="ToolBox - Excellent Tools for Everyone">
-    <meta property="og:description" content="Discover a vibrant, all-in-one toolbox with calculators, games, generators, and more!">
+    <meta property="og:title" content="ToolBox - All-in-One Online Tools">
+    <meta property="og:description" content="Explore a wide range of free tools: calculators, converters, generators, games, and more!">
     <meta property="og:type" content="website">
-    <title>ToolBox - Excellent Tools for Everyone</title>
+    <title>ToolBox - All-in-One Online Tools</title>
     
     <style>
         :root {
@@ -64,7 +64,7 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         .nav-content {
@@ -77,31 +77,29 @@
         }
 
         .logo {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 700;
             color: white;
-            text-shadow: 2px 2px 6px rgba(0,0,0,0.3);
-            animation: glow 2s infinite alternate;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
 
         .nav-tabs {
             display: flex;
-            gap: 25px;
+            gap: 20px;
         }
 
         .nav-tabs a {
             color: white;
             text-decoration: none;
-            padding: 10px 25px;
-            border-radius: 30px;
+            padding: 10px 20px;
+            border-radius: 25px;
             transition: all 0.3s ease;
-            font-weight: 600;
-            background: rgba(255,255,255,0.1);
+            font-weight: 500;
         }
 
         .nav-tabs a:hover {
             background: var(--accent);
-            transform: scale(1.05);
+            transform: translateY(-2px);
         }
 
         .theme-toggle {
@@ -109,96 +107,86 @@
             color: var(--text-light);
             border: none;
             border-radius: 50%;
-            width: 45px;
-            height: 45px;
+            width: 40px;
+            height: 40px;
             cursor: pointer;
-            transition: transform 0.5s ease;
-            font-size: 20px;
+            transition: transform 0.3s ease;
         }
 
         .theme-toggle:hover {
             transform: rotate(360deg);
         }
 
-        .hero {
+        header {
             text-align: center;
-            padding: 80px 0;
-            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            padding: 60px 0;
+            background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent));
             color: white;
-            border-radius: 25px;
-            margin: 30px 0;
+            border-radius: 20px;
+            margin: 20px 0;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
-        .hero h1 {
-            font-size: 48px;
-            margin-bottom: 20px;
-            animation: slideUp 1s ease forwards;
-        }
-
-        .hero p {
-            font-size: 20px;
-            max-width: 800px;
-            margin: 0 auto 30px;
-            animation: slideUp 1.2s ease forwards;
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
         }
 
         .search-bar {
+            margin: 20px 0;
             position: relative;
-            max-width: 700px;
-            margin: 0 auto;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         #searchInput {
             width: 100%;
-            padding: 18px 25px;
+            padding: 15px 20px;
             border: none;
-            border-radius: 35px;
+            border-radius: 30px;
             background: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            font-size: 18px;
-            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            font-size: 16px;
+            transition: transform 0.3s ease;
         }
 
         #searchInput:focus {
-            transform: scale(1.03);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            transform: scale(1.02);
             outline: none;
         }
 
         .ad-space {
-            margin: 40px 0;
-            padding: 25px;
-            background: linear-gradient(45deg, var(--highlight), var(--accent));
-            border-radius: 20px;
-            min-height: 120px;
+            margin: 30px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--highlight), var(--accent));
+            border-radius: 15px;
+            min-height: 100px;
             text-align: center;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .ad-space:hover {
-            transform: scale(1.01);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
         .categories {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-            gap: 30px;
-            margin: 40px 0;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
         }
 
         .category {
             background: white;
-            border-radius: 25px;
-            padding: 30px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            transition: all 0.4s ease;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
             perspective: 1000px;
-            position: relative;
-            overflow: hidden;
         }
 
         .dark .category {
@@ -206,57 +194,41 @@
         }
 
         .category:hover {
-            transform: translateY(-12px) rotateX(5deg) scale(1.03);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-        }
-
-        .category::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .category:hover::before {
-            opacity: 1;
+            transform: translateY(-10px) rotateX(5deg) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
         }
 
         .category-header {
             display: flex;
             align-items: center;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         .category h2 {
             color: var(--primary);
-            margin-left: 20px;
-            font-size: 24px;
+            margin-left: 15px;
+            font-size: 22px;
             position: relative;
         }
 
         .category h2::after {
             content: '';
             position: absolute;
-            width: 70px;
+            width: 60px;
             height: 4px;
             background: var(--secondary);
-            bottom: -10px;
+            bottom: -8px;
             left: 0;
             border-radius: 2px;
             animation: slide 2s infinite;
         }
 
         .icon-3d {
-            width: 70px;
-            height: 70px;
+            width: 60px;
+            height: 60px;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.7s ease;
+            transition: transform 0.6s ease;
         }
 
         .category:hover .icon-3d {
@@ -267,14 +239,13 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            border-radius: 20px;
+            border-radius: 15px;
             backface-visibility: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 36px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-            border: 2px solid rgba(255,255,255,0.3);
+            font-size: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
         .icon-front {
@@ -299,17 +270,12 @@
         }
 
         li {
-            padding: 14px 0;
+            padding: 12px 0;
             opacity: 0;
-            transform: translateY(25px);
-            animation: fadeIn 0.6s ease forwards;
+            transform: translateY(20px);
+            animation: fadeIn 0.5s ease forwards;
             display: flex;
             align-items: center;
-            transition: transform 0.3s ease;
-        }
-
-        li:hover {
-            transform: translateX(5px);
         }
 
         li:nth-child(1) { animation-delay: 0.1s; }
@@ -323,17 +289,17 @@
         li:nth-child(9) { animation-delay: 0.9s; }
 
         .tool-icon {
-            width: 28px;
-            height: 28px;
-            margin-right: 15px;
+            width: 24px;
+            height: 24px;
+            margin-right: 12px;
             background: var(--category-color);
             border-radius: 50%;
-            transition: transform 0.4s ease;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
         li:hover .tool-icon {
-            transform: scale(1.3) rotate(20deg);
+            transform: scale(1.2) rotate(15deg);
         }
 
         a {
@@ -341,7 +307,6 @@
             text-decoration: none;
             transition: color 0.3s ease;
             font-weight: 500;
-            font-size: 16px;
         }
 
         .dark a {
@@ -354,24 +319,35 @@
 
         .bottom-bar {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
-            padding: 25px;
+            padding: 20px;
             text-align: center;
             color: white;
-            margin-top: 50px;
-            border-radius: 20px 20px 0 0;
-            box-shadow: 0 -8px 20px rgba(0,0,0,0.15);
+            position: relative;
+            margin-top: 40px;
+            border-radius: 15px 15px 0 0;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
         }
 
         .bottom-bar a {
             color: var(--highlight);
-            margin: 0 20px;
-            font-weight: 600;
-            transition: all 0.3s ease;
+            margin: 0 15px;
+            font-weight: 500;
         }
 
         .bottom-bar a:hover {
             color: white;
-            text-shadow: 0 0 5px rgba(255,255,255,0.5);
+        }
+
+        .tool-content {
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .dark .tool-content {
+            background: #2C3E50;
         }
 
         @keyframes fadeIn {
@@ -380,57 +356,41 @@
 
         @keyframes slide {
             0% { transform: translateX(0); }
-            50% { transform: translateX(40px); }
+            50% { transform: translateX(30px); }
             100% { transform: translateX(0); }
         }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes glow {
-            from { text-shadow: 2px 2px 6px rgba(0,0,0,0.3); }
-            to { text-shadow: 2px 2px 10px rgba(255,255,255,0.5); }
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
         }
 
         @media (max-width: 768px) {
             .categories {
                 grid-template-columns: 1fr;
             }
-            .hero {
-                padding: 50px 0;
-            }
-            .hero h1 {
-                font-size: 36px;
-            }
-            .hero p {
-                font-size: 16px;
+            header {
+                padding: 40px 0;
             }
             .nav-tabs {
                 flex-wrap: wrap;
                 justify-content: center;
-                gap: 15px;
+                gap: 10px;
             }
             .nav-tabs a {
-                padding: 8px 20px;
+                padding: 8px 15px;
             }
         }
 
         @media (max-width: 480px) {
             .container {
-                padding: 15px;
+                padding: 10px;
             }
             .icon-3d {
-                width: 60px;
-                height: 60px;
+                width: 50px;
+                height: 50px;
             }
             .category h2 {
-                font-size: 20px;
-            }
-            .tool-icon {
-                width: 24px;
-                height: 24px;
+                font-size: 18px;
             }
         }
     </style>
@@ -450,26 +410,18 @@
     </nav>
 
     <div class="container">
-        <section class="hero">
-            <h1>ToolBox: Excellent Tools for Everyone</h1>
-            <p>Unleash your creativity and productivity with our vibrant collection of free online tools!</p>
+        <header>
+            <h1>Welcome to ToolBox</h1>
+            <p>Discover a vibrant collection of free online tools!</p>
             <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="Find Your Tool...">
+                <input type="text" id="searchInput" placeholder="Search tools...">
             </div>
-        </section>
+        </header>
+
+        <div id="toolContent" class="tool-content" style="display: none;"></div>
 
         <div class="ad-space">
-            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=YOUR_ADSENSE_PUBLISHER_ID"
-                 crossorigin="anonymous"></script>
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="YOUR_ADSENSE_PUBLISHER_ID"
-                 data-ad-slot="YOUR_ADSENSE_AD_UNIT_ID"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
+            <p>[AdSense Placeholder - Insert your AdSense code here]</p>
         </div>
 
         <div class="categories">
@@ -568,7 +520,6 @@
                 </div>
                 <ul>
                     <li><span class="tool-icon"></span><a href="#">Drawing App</a></li>
-                    <li><span class="tool-icon"></span><a href="image compressor.html">Image Compressor</a></li>
                     <li><span class="tool-icon"></span><a href="#">Image Gallery</a></li>
                     <li><span class="tool-icon"></span><a href="#">Audio Player</a></li>
                     <li><span class="tool-icon"></span><a href="#">Video Player</a></li>
@@ -597,22 +548,12 @@
         </div>
 
         <div class="ad-space">
-            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=YOUR_ADSENSE_PUBLISHER_ID"
-                 crossorigin="anonymous"></script>
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="YOUR_ADSENSE_PUBLISHER_ID"
-                 data-ad-slot="YOUR_ADSENSE_AD_UNIT_ID_2"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
+            <p>[AdSense Placeholder - Insert your AdSense code here]</p>
         </div>
     </div>
 
     <footer class="bottom-bar">
-        <p>© 2025 ToolBox - Excellent Tools for Everyone | 
+        <p>© 2025 ToolBox. All rights reserved. | 
         <a href="#">Privacy Policy</a> | 
         <a href="#">Terms of Service</a> | 
         <a href="#">Contact Us</a></p>
@@ -625,7 +566,66 @@
             document.body.classList.toggle('dark');
             const button = document.querySelector('.theme-toggle');
             button.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+            const toolContentDiv = document.getElementById('toolContent');
+            toolContentDiv.style.background = document.body.classList.contains('dark') ? '#2C3E50' : 'white';
         }
+
+        // Back to Categories
+        function showCategories() {
+            document.getElementById('toolContent').style.display = 'none';
+            document.querySelector('.categories').style.display = 'grid';
+        }
+
+        // Load Tool Content
+        function loadToolContent(toolName, event) {
+            event.preventDefault();
+            const toolContentDiv = document.getElementById('toolContent');
+            const categoriesDiv = document.querySelector('.categories');
+            categoriesDiv.style.display = 'none';
+            toolContentDiv.style.display = 'block';
+
+            let content = `<button onclick="showCategories()" style="margin-bottom: 20px; padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 10px; cursor: pointer;">Back to Tools</button>`;
+
+            if (toolName === 'Tip Calculator') {
+                content += `
+                    <h2>Tip Calculator</h2>
+                    <div style="margin-top: 20px;">
+                        <label>Bill Amount: <input type="number" id="billAmount" placeholder="Enter amount" style="padding: 10px; margin: 10px 0;"></label><br>
+                        <label>Tip Percentage: <input type="number" id="tipPercentage" placeholder="Enter %" value="15" style="padding: 10px; margin: 10px 0;"></label><br>
+                        <button onclick="calculateTip()" style="padding: 10px 20px; background: var(--secondary); color: white; border: none; border-radius: 10px; cursor: pointer;">Calculate</button>
+                        <p id="tipResult" style="margin-top: 20px;"></p>
+                    </div>
+                `;
+            } else {
+                content += `<h2>${toolName}</h2><p>Tool coming soon!</p>`;
+            }
+
+            toolContentDiv.innerHTML = content;
+        }
+
+        // Tip Calculator Logic
+        function calculateTip() {
+            const billAmount = parseFloat(document.getElementById('billAmount').value);
+            const tipPercentage = parseFloat(document.getElementById('tipPercentage').value);
+            if (isNaN(billAmount) || isNaN(tipPercentage)) {
+                document.getElementById('tipResult').innerHTML = 'Please enter valid numbers.';
+                return;
+            }
+            const tip = (billAmount * tipPercentage) / 100;
+            const total = billAmount + tip;
+            document.getElementById('tipResult').innerHTML = `
+                Tip: $${tip.toFixed(2)}<br>
+                Total: $${total.toFixed(2)}
+            `;
+        }
+
+        // Attach Click Events to Tool Links
+        document.querySelectorAll('.category li a').forEach(link => {
+            link.addEventListener('click', function(event) {
+                const toolName = this.textContent.trim();
+                loadToolContent(toolName, event);
+            });
+        });
 
         // Search Functionality
         const searchInput = document.getElementById('searchInput');
@@ -633,7 +633,6 @@
 
         searchInput.addEventListener('input', function(e) {
             const searchTerm = e.target.value.toLowerCase();
-            
             tools.forEach(tool => {
                 const text = tool.textContent.toLowerCase();
                 if (text.includes(searchTerm)) {
@@ -642,10 +641,8 @@
                 } else {
                     tool.style.display = 'none';
                 }
-                
                 const category = tool.parentElement.parentElement;
-                const visibleTools = Array.from(category.querySelectorAll('li'))
-                    .some(li => li.style.display !== 'none');
+                const visibleTools = Array.from(category.querySelectorAll('li')).some(li => li.style.display !== 'none');
                 category.style.display = visibleTools ? 'block' : 'none';
             });
         });
