@@ -12,7 +12,6 @@
     <title>ToolBox - All-in-One Online Tools</title>
     
     <style>
-        /* Existing styles remain unchanged */
         :root {
             --primary: #6C5CE7;
             --secondary: #00CEC9;
@@ -30,455 +29,77 @@
             --life-color: #A55EEA;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            min-height: 100vh;
-            transition: all 0.3s ease;
-            overflow-x: hidden;
-        }
-
-        body.light {
-            background: var(--bg-light);
-            color: var(--text-light);
-        }
-
-        body.dark {
-            background: var(--bg-dark);
-            color: var(--text-dark);
-        }
-
-        .container {
-            max-width: 1300px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        nav {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            padding: 15px 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .nav-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1300px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: 700;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .nav-tabs {
-            display: flex;
-            gap: 20px;
-        }
-
-        .nav-tabs a {
-            color: white;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 25px;
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
-
-        .nav-tabs a:hover {
-            background: var(--accent);
-            transform: translateY(-2px);
-        }
-
-        .theme-toggle {
-            background: var(--highlight);
-            color: var(--text-light);
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .theme-toggle:hover {
-            transform: rotate(360deg);
-        }
-
-        header {
-            text-align: center;
-            padding: 60px 0;
-            background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent));
-            color: white;
-            border-radius: 20px;
-            margin: 20px 0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
-            animation: rotate 20s linear infinite;
-        }
-
-        .search-bar {
-            margin: 20px 0;
-            position: relative;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        #searchInput {
-            width: 100%;
-            padding: 15px 20px;
-            border: none;
-            border-radius: 30px;
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            font-size: 16px;
-            transition: transform 0.3s ease;
-        }
-
-        #searchInput:focus {
-            transform: scale(1.02);
-            outline: none;
-        }
-
-        .ad-space {
-            margin: 30px 0;
-            padding: 20px;
-            background: linear-gradient(135deg, var(--highlight), var(--accent));
-            border-radius: 15px;
-            min-height: 100px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .categories {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 25px;
-            margin: 30px 0;
-        }
-
-        .category {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
-            perspective: 1000px;
-        }
-
-        .dark .category {
-            background: #2C3E50;
-        }
-
-        .category:hover {
-            transform: translateY(-10px) rotateX(5deg) scale(1.02);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-        }
-
-        .category-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .category h2 {
-            color: var(--primary);
-            margin-left: 15px;
-            font-size: 22px;
-            position: relative;
-        }
-
-        .category h2::after {
-            content: '';
-            position: absolute;
-            width: 60px;
-            height: 4px;
-            background: var(--secondary);
-            bottom: -8px;
-            left: 0;
-            border-radius: 2px;
-            animation: slide 2s infinite;
-        }
-
-        .icon-3d {
-            width: 60px;
-            height: 60px;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.6s ease;
-        }
-
-        .category:hover .icon-3d {
-            transform: rotateY(360deg) rotateX(360deg);
-        }
-
-        .icon-face {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 15px;
-            backface-visibility: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .icon-front {
-            background: linear-gradient(135deg, var(--category-color), var(--category-color-dark));
-            z-index: 2;
-        }
-
-        .icon-back {
-            background: linear-gradient(135deg, var(--category-color-dark), var(--category-color));
-            transform: rotateY(180deg);
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; min-height: 100vh; transition: all 0.3s ease; overflow-x: hidden; }
+        body.light { background: var(--bg-light); color: var(--text-light); }
+        body.dark { background: var(--bg-dark); color: var(--text-dark); }
+        .container { max-width: 1300px; margin: 0 auto; padding: 20px; }
+        nav { background: linear-gradient(135deg, var(--primary), var(--secondary)); padding: 15px 0; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .nav-content { display: flex; justify-content: space-between; align-items: center; max-width: 1300px; margin: 0 auto; padding: 0 20px; }
+        .logo { font-size: 24px; font-weight: 700; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
+        .nav-tabs { display: flex; gap: 20px; }
+        .nav-tabs a { color: white; text-decoration: none; padding: 10px 20px; border-radius: 25px; transition: all 0.3s ease; font-weight: 500; }
+        .nav-tabs a:hover { background: var(--accent); transform: translateY(-2px); }
+        .theme-toggle { background: var(--highlight); color: var(--text-light); border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; transition: transform 0.3s ease; }
+        .theme-toggle:hover { transform: rotate(360deg); }
+        header { text-align: center; padding: 60px 0; background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent)); color: white; border-radius: 20px; margin: 20px 0; position: relative; overflow: hidden; }
+        header::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%); animation: rotate 20s linear infinite; }
+        .search-bar { margin: 20px 0; position: relative; max-width: 600px; margin-left: auto; margin-right: auto; }
+        #searchInput { width: 100%; padding: 15px 20px; border: none; border-radius: 30px; background: rgba(255, 255, 255, 0.95); box-shadow: 0 5px 15px rgba(0,0,0,0.1); font-size: 16px; transition: transform 0.3s ease; }
+        #searchInput:focus { transform: scale(1.02); outline: none; }
+        .ad-space { margin: 30px 0; padding: 20px; background: linear-gradient(135deg, var(--highlight), var(--accent)); border-radius: 15px; min-height: 100px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; margin: 30px 0; }
+        .category { background: white; border-radius: 20px; padding: 25px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); transition: all 0.3s ease; perspective: 1000px; }
+        .dark .category { background: #2C3E50; }
+        .category:hover { transform: translateY(-10px) rotateX(5deg) scale(1.02); box-shadow: 0 15px 30px rgba(0,0,0,0.15); }
+        .category-header { display: flex; align-items: center; margin-bottom: 20px; }
+        .category h2 { color: var(--primary); margin-left: 15px; font-size: 22px; position: relative; }
+        .category h2::after { content: ''; position: absolute; width: 60px; height: 4px; background: var(--secondary); bottom: -8px; left: 0; border-radius: 2px; animation: slide 2s infinite; }
+        .icon-3d { width: 60px; height: 60px; position: relative; transform-style: preserve-3d; transition: transform 0.6s ease; }
+        .category:hover .icon-3d { transform: rotateY(360deg) rotateX(360deg); }
+        .icon-face { position: absolute; width: 100%; height: 100%; border-radius: 15px; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .icon-front { background: linear-gradient(135deg, var(--category-color), var(--category-color-dark)); z-index: 2; }
+        .icon-back { background: linear-gradient(135deg, var(--category-color-dark), var(--category-color)); transform: rotateY(180deg); }
         .calc .icon-3d { --category-color: var(--calc-color); --category-color-dark: #2D9CDB; }
         .gen .icon-3d { --category-color: var(--gen-color); --category-color-dark: #D63031; }
         .text .icon-3d { --category-color: var(--text-color); --category-color-dark: #0984E3; }
         .game .icon-3d { --category-color: var(--game-color); --category-color-dark: #F1C40F; }
         .visual .icon-3d { --category-color: var(--visual-color); --category-color-dark: #10AC84; }
         .life .icon-3d { --category-color: var(--life-color); --category-color-dark: #6F1E51; }
-
-        ul {
-            list-style: none;
-        }
-
-        li {
-            padding: 12px 0;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeIn 0.5s ease forwards;
-            display: flex;
-            align-items: center;
-        }
-
-        li:nth-child(1) { animation-delay: 0.1s; }
-        li:nth-child(2) { animation-delay: 0.2s; }
-        li:nth-child(3) { animation-delay: 0.3s; }
-        li:nth-child(4) { animation-delay: 0.4s; }
-        li:nth-child(5) { animation-delay: 0.5s; }
-        li:nth-child(6) { animation-delay: 0.6s; }
-        li:nth-child(7) { animation-delay: 0.7s; }
-        li:nth-child(8) { animation-delay: 0.8s; }
+        ul { list-style: none; }
+        li { padding: 12px 0; opacity: 0; transform: translateY(20px); animation: fadeIn 0.5s ease forwards; display: flex; align-items: center; }
+        li:nth-child(1) { animation-delay: 0.1s; } li:nth-child(2) { animation-delay: 0.2s; }
+        li:nth-child(3) { animation-delay: 0.3s; } li:nth-child(4) { animation-delay: 0.4s; }
+        li:nth-child(5) { animation-delay: 0.5s; } li:nth-child(6) { animation-delay: 0.6s; }
+        li:nth-child(7) { animation-delay: 0.7s; } li:nth-child(8) { animation-delay: 0.8s; }
         li:nth-child(9) { animation-delay: 0.9s; }
+        .tool-icon { width: 24px; height: 24px; margin-right: 12px; background: var(--category-color); border-radius: 50%; transition: transform 0.3s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        li:hover .tool-icon { transform: scale(1.2) rotate(15deg); }
+        a { color: var(--text-light); text-decoration: none; transition: color 0.3s ease; font-weight: 500; }
+        .dark a { color: var(--text-dark); }
+        a:hover { color: var(--highlight); }
+        .bottom-bar { background: linear-gradient(135deg, var(--primary), var(--secondary)); padding: 20px; text-align: center; color: white; position: relative; margin-top: 40px; border-radius: 15px 15px 0 0; box-shadow: 0 -5px 15px rgba(0,0,0,0.1); }
+        .bottom-bar a { color: var(--highlight); margin: 0 15px; font-weight: 500; }
+        .bottom-bar a:hover { color: white; }
+        .tool-content { padding: 30px; background: white; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin: 0 auto; max-width: 800px; text-align: center; }
+        .dark .tool-content { background: #2C3E50; }
+        #toolEmbedder { display: none; padding: 20px; background: white; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin: 20px auto; max-width: 800px; }
+        .dark #toolEmbedder { background: #2C3E50; }
+        #toolEmbedder h2 { color: var(--primary); margin-bottom: 20px; }
+        #toolEmbedder textarea { width: 100%; height: 100px; padding: 10px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc; }
+        #toolEmbedder input[type="text"] { width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc; }
+        #toolEmbedder button { padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 10px; cursor: pointer; margin-right: 10px; }
+        #toolEmbedder button:hover { background: var(--accent); }
+        .tool-management { margin-top: 20px; }
+        .tool-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: #f9f9f9; border-radius: 5px; margin-bottom: 10px; }
+        .dark .tool-item { background: #34495E; }
+        .tool-item button { padding: 5px 10px; font-size: 14px; }
 
-        .tool-icon {
-            width: 24px;
-            height: 24px;
-            margin-right: 12px;
-            background: var(--category-color);
-            border-radius: 50%;
-            transition: transform 0.3s ease;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        li:hover .tool-icon {
-            transform: scale(1.2) rotate(15deg);
-        }
-
-        a {
-            color: var(--text-light);
-            text-decoration: none;
-            transition: color 0.3s ease;
-            font-weight: 500;
-        }
-
-        .dark a {
-            color: var(--text-dark);
-        }
-
-        a:hover {
-            color: var(--highlight);
-        }
-
-        .bottom-bar {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            padding: 20px;
-            text-align: center;
-            color: white;
-            position: relative;
-            margin-top: 40px;
-            border-radius: 15px 15px 0 0;
-            box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
-        }
-
-        .bottom-bar a {
-            color: var(--highlight);
-            margin: 0 15px;
-            font-weight: 500;
-        }
-
-        .bottom-bar a:hover {
-            color: white;
-        }
-
-        .tool-content {
-            padding: 30px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin: 0 auto;
-            max-width: 800px;
-            text-align: center;
-        }
-
-        .dark .tool-content {
-            background: #2C3E50;
-        }
-
-        /* New Styles for Tool Embedder and Tools Page */
-        #embedderPanel {
-            display: none; /* Hidden by default, admin-only */
-            padding: 20px;
-            background: var(--bg-light);
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-
-        .dark #embedderPanel {
-            background: var(--bg-dark);
-        }
-
-        #embedderPanel textarea {
-            width: 100%;
-            height: 200px;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 10px;
-            border: 1px solid var(--primary);
-            resize: vertical;
-        }
-
-        #embedderPanel button {
-            padding: 10px 20px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            margin-right: 10px;
-        }
-
-        #embedderPanel button:hover {
-            background: var(--secondary);
-        }
-
-        .tool-item {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            position: relative;
-        }
-
-        .dark .tool-item {
-            background: #2C3E50;
-        }
-
-        .tool-controls {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .tool-controls button {
-            padding: 5px 10px;
-            background: var(--accent);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .tool-controls button:hover {
-            background: var(--highlight);
-        }
-
-        .tool-private {
-            opacity: 0.5;
-        }
-
-        @keyframes fadeIn {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes slide {
-            0% { transform: translateX(0); }
-            50% { transform: translateX(30px); }
-            100% { transform: translateX(0); }
-        }
-
-        @keyframes rotate {
-            100% { transform: rotate(360deg); }
-        }
-
-        @media (max-width: 768px) {
-            .categories {
-                grid-template-columns: 1fr;
-            }
-            header {
-                padding: 40px 0;
-            }
-            .nav-tabs {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 10px;
-            }
-            .nav-tabs a {
-                padding: 8px 15px;
-            }
-            .tool-content {
-                padding: 20px;
-                max-width: 100%;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 10px;
-            }
-            .icon-3d {
-                width: 50px;
-                height: 50px;
-            }
-            .category h2 {
-                font-size: 18px;
-            }
-            .ad-space {
-                margin: 20px 0;
-            }
-        }
+        @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+        @keyframes slide { 0% { transform: translateX(0); } 50% { transform: translateX(30px); } 100% { transform: translateX(0); } }
+        @keyframes rotate { 100% { transform: rotate(360deg); } }
+        @media (max-width: 768px) { .categories { grid-template-columns: 1fr; } header { padding: 40px 0; } .nav-tabs { flex-wrap: wrap; justify-content: center; gap: 10px; } .nav-tabs a { padding: 8px 15px; } .tool-content { padding: 20px; max-width: 100%; } }
+        @media (max-width: 480px) { .container { padding: 10px; } .icon-3d { width: 50px; height: 50px; } .category h2 { font-size: 18px; } .ad-space { margin: 20px 0; } }
     </style>
 </head>
 <body class="light">
@@ -487,7 +108,7 @@
             <div class="logo">ToolBox</div>
             <div class="nav-tabs">
                 <a href="#" class="active">Home</a>
-                <a href="#" id="toolsLink">Tools</a>
+                <a href="#">Tools</a>
                 <a href="#">About</a>
                 <a href="#">Contact</a>
             </div>
@@ -504,20 +125,14 @@
             </div>
         </header>
 
-        <!-- Admin-Only Tool Code Embedder -->
-        <div id="embedderPanel">
-            <h2>Tool Code Embedder (Admin Only)</h2>
-            <textarea id="toolCodeInput" placeholder="Paste your tool's HTML/CSS/JS code here..."></textarea>
-            <button onclick="embedTool()">Embed Tool</button>
-        </div>
-
-        <!-- Tools Load Page -->
-        <div id="toolsPage" style="display: none;">
-            <button onclick="showCategories()" style="margin-bottom: 20px; padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 10px; cursor: pointer;">Back to Home</button>
-            <div id="toolsContainer"></div>
-            <div class="ad-space">
-                <p>[AdSense Placeholder - Insert your AdSense code here]</p>
-            </div>
+        <div id="toolEmbedder">
+            <h2>Add New Tool</h2>
+            <input type="text" id="toolName" placeholder="Tool Name">
+            <textarea id="toolHtml" placeholder="Paste HTML or full code here"></textarea>
+            <textarea id="toolCss" placeholder="Paste CSS here (optional)"></textarea>
+            <textarea id="toolJs" placeholder="Paste JavaScript here (optional)"></textarea>
+            <button onclick="addTool()">Add Tool</button>
+            <div class="tool-management" id="toolList"></div>
         </div>
 
         <div id="toolContent" class="tool-content" style="display: none;"></div>
@@ -555,7 +170,7 @@
                         <div class="icon-face icon-front">⚙️</div>
                         <div class="icon-face icon-back">⚙️</div>
                     </div>
-                   extraspace<h2>Generators & Utilities</h2>
+                    <h2>Generators & Utilities</h2>
                 </div>
                 <ul>
                     <li><span class="tool-icon"></span><a href="#">Password Generator</a></li>
@@ -663,7 +278,6 @@
     </footer>
 
     <script>
-        // Theme Toggle
         function toggleTheme() {
             document.body.classList.toggle('light');
             document.body.classList.toggle('dark');
@@ -671,40 +285,106 @@
             button.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
             const toolContentDiv = document.getElementById('toolContent');
             toolContentDiv.style.background = document.body.classList.contains('dark') ? '#2C3E50' : 'white';
-            updateToolsDisplay(); // Refresh tools display for theme
+            document.getElementById('toolEmbedder').style.background = document.body.classList.contains('dark') ? '#2C3E50' : 'white';
         }
 
-        // Show Categories (Home)
         function showCategories() {
             document.getElementById('toolContent').style.display = 'none';
-            document.getElementById('toolsPage').style.display = 'none';
             document.querySelector('.categories').style.display = 'grid';
             document.querySelectorAll('.ad-space').forEach(ad => ad.style.display = 'block');
-            document.getElementById('embedderPanel').style.display = isAdmin() ? 'block' : 'none';
         }
 
-        // Show Tools Page
-        function showToolsPage(event) {
-            event.preventDefault();
-            document.querySelector('.categories').style.display = 'none';
-            document.getElementById('toolContent').style.display = 'none';
-            document.getElementById('toolsPage').style.display = 'block';
-            document.querySelectorAll('.ad-space').forEach(ad => ad.style.display = 'none');
-            document.getElementById('toolsPage').querySelector('.ad-space').style.display = 'block';
-            document.getElementById('embedderPanel').style.display = isAdmin() ? 'block' : 'none';
-            updateToolsDisplay();
+        const isAdmin = true; // Simulate admin access; set to false for public
+        if (isAdmin) {
+            document.getElementById('toolEmbedder').style.display = 'block';
         }
 
-        // Load Tool Content
+        let tools = JSON.parse(localStorage.getItem('tools')) || [];
+
+        function addTool() {
+            const name = document.getElementById('toolName').value;
+            const html = document.getElementById('toolHtml').value;
+            const css = document.getElementById('toolCss').value;
+            const js = document.getElementById('toolJs').value;
+            if (!name || !html) {
+                alert('Please provide a tool name and HTML code.');
+                return;
+            }
+            const tool = { name, html, css, js, isPublic: false };
+            tools.push(tool);
+            localStorage.setItem('tools', JSON.stringify(tools));
+            updateToolList();
+            document.getElementById('toolName').value = '';
+            document.getElementById('toolHtml').value = '';
+            document.getElementById('toolCss').value = '';
+            document.getElementById('toolJs').value = '';
+        }
+
+        function updateToolList() {
+            const toolList = document.getElementById('toolList');
+            toolList.innerHTML = '';
+            const calcUl = document.querySelector('.category.calc ul');
+            calcUl.innerHTML = ''; // Reset default tools; customize as needed
+            tools.forEach((tool, index) => {
+                const div = document.createElement('div');
+                div.className = 'tool-item';
+                div.innerHTML = `
+                    ${tool.name} 
+                    <div>
+                        <button onclick="togglePublic(${index})">${tool.isPublic ? 'Make Private' : 'Make Public'}</button>
+                        <button onclick="deleteTool(${index})">Delete</button>
+                    </div>
+                `;
+                toolList.appendChild(div);
+                if (tool.isPublic) {
+                    const link = document.createElement('a');
+                    link.href = '#';
+                    link.textContent = tool.name;
+                    link.addEventListener('click', (e) => loadToolContent(tool.name, e));
+                    const li = document.createElement('li');
+                    li.innerHTML = `<span class="tool-icon"></span>`;
+                    li.appendChild(link);
+                    calcUl.appendChild(li);
+                }
+            });
+            // Re-add default tools if needed
+            const defaultTools = [
+                'Tip Calculator', 'BMI Calculator', 'Loan Calculator', 'Unit Converter', 
+                'Temperature Converter', 'Currency Converter', 'Age Calculator', 
+                'Percentage Calculator', 'Time Zone Converter', 'Binary/Decimal Converter'
+            ];
+            defaultTools.forEach(toolName => {
+                const link = document.createElement('a');
+                link.href = '#';
+                link.textContent = toolName;
+                link.addEventListener('click', (e) => loadToolContent(toolName, e));
+                const li = document.createElement('li');
+                li.innerHTML = `<span class="tool-icon"></span>`;
+                li.appendChild(link);
+                calcUl.appendChild(li);
+            });
+        }
+
+        function togglePublic(index) {
+            tools[index].isPublic = !tools[index].isPublic;
+            localStorage.setItem('tools', JSON.stringify(tools));
+            updateToolList();
+        }
+
+        function deleteTool(index) {
+            tools.splice(index, 1);
+            localStorage.setItem('tools', JSON.stringify(tools));
+            updateToolList();
+        }
+
         function loadToolContent(toolName, event) {
             event.preventDefault();
             const toolContentDiv = document.getElementById('toolContent');
             const categoriesDiv = document.querySelector('.categories');
-            const toolsPage = document.getElementById('toolsPage');
+            const adSpaces = document.querySelectorAll('.ad-space');
             categoriesDiv.style.display = 'none';
-            toolsPage.style.display = 'none';
+            adSpaces.forEach(ad => ad.style.display = 'none');
             toolContentDiv.style.display = 'block';
-            document.querySelectorAll('.ad-space').forEach(ad => ad.style.display = 'none');
 
             let content = `
                 <div class="ad-space" style="margin-bottom: 30px;">
@@ -713,7 +393,21 @@
                 <button onclick="showCategories()" style="margin-bottom: 20px; padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 10px; cursor: pointer;">Back to Tools</button>
             `;
 
-            if (toolName === 'Tip Calculator') {
+            const embeddedTool = tools.find(t => t.name === toolName && t.isPublic);
+            if (embeddedTool) {
+                content += `<h2>${toolName}</h2>`;
+                if (embeddedTool.css) {
+                    const style = document.createElement('style');
+                    style.textContent = embeddedTool.css;
+                    document.head.appendChild(style);
+                }
+                content += embeddedTool.html;
+                if (embeddedTool.js) {
+                    const script = document.createElement('script');
+                    script.textContent = embeddedTool.js;
+                    setTimeout(() => document.body.appendChild(script), 0); // Ensure DOM is ready
+                }
+            } else if (toolName === 'Tip Calculator') {
                 content += `
                     <h2>Tip Calculator</h2>
                     <div style="margin-top: 20px;">
@@ -721,39 +415,6 @@
                         <label>Tip Percentage: <input type="number" id="tipPercentage" placeholder="Enter %" value="15" style="padding: 10px; margin: 10px 0;"></label><br>
                         <button onclick="calculateTip()" style="padding: 10px 20px; background: var(--secondary); color: white; border: none; border-radius: 10px; cursor: pointer;">Calculate</button>
                         <p id="tipResult" style="margin-top: 20px;"></p>
-                    </div>
-                `;
-            } else if (toolName === 'Image Compressor') {
-                content += `
-                    <div class="compressor-container">
-                        <div class="compressor-header">
-                            <h1>Image Compressor</h1>
-                            <p>Optimize your images with custom compression levels</p>
-                        </div>
-                        <section class="compressor-tool">
-                            <div class="form-group">
-                                <label for="imageInput">Select Image:</label>
-                                <input type="file" id="imageInput" accept="image/*">
-                            </div>
-                            <div class="form-group">
-                                <label for="compressionLevel">Compression Level: <span id="compressionValue">50</span>%</label>
-                                <input type="range" id="compressionLevel" min="0" max="100" value="50" oninput="document.getElementById('compressionValue').textContent = this.value">
-                            </div>
-                            <button onclick="compressImage()" style="padding: 12px 25px; background: var(--primary); color: white; border: none; border-radius: 25px; cursor: pointer;">Compress Image</button>
-                            <div class="image-preview">
-                                <div class="preview-box">
-                                    <h3>Original</h3>
-                                    <canvas id="originalCanvas"></canvas>
-                                    <p id="originalSize"></p>
-                                </div>
-                                <div class="preview-box">
-                                    <h3>Compressed</h3>
-                                    <canvas id="compressedCanvas"></canvas>
-                                    <p id="compressedSize"></p>
-                                    <a id="downloadLink" style="display: none;">Download Compressed Image</a>
-                                </div>
-                            </div>
-                        </section>
                     </div>
                 `;
             } else {
@@ -769,7 +430,6 @@
             toolContentDiv.innerHTML = content;
         }
 
-        // Tip Calculator Logic
         function calculateTip() {
             const billAmount = parseFloat(document.getElementById('billAmount').value);
             const tipPercentage = parseFloat(document.getElementById('tipPercentage').value);
@@ -785,148 +445,6 @@
             `;
         }
 
-        // Image Compressor Logic
-        function compressImage() {
-            const imageInput = document.getElementById('imageInput');
-            const compressionLevel = document.getElementById('compressionLevel');
-            const compressionValue = document.getElementById('compressionValue');
-            const originalCanvas = document.getElementById('originalCanvas');
-            const compressedCanvas = document.getElementById('compressedCanvas');
-            const originalSize = document.getElementById('originalSize');
-            const compressedSize = document.getElementById('compressedSize');
-            const downloadLink = document.getElementById('downloadLink');
-
-            const file = imageInput.files[0];
-            if (!file) {
-                alert('Please select an image first');
-                return;
-            }
-
-            const img = new Image();
-            const reader = new FileReader();
-
-            reader.onload = async (e) => {
-                img.src = e.target.result;
-
-                img.onload = async () => {
-                    const origCtx = originalCanvas.getContext('2d');
-                    originalCanvas.width = img.width;
-                    originalCanvas.height = img.height;
-                    origCtx.drawImage(img, 0, 0);
-                    originalSize.textContent = `Size: ${(file.size / 1024).toFixed(2)} KB`;
-
-                    const quality = (100 - compressionLevel.value) / 100;
-                    const compCtx = compressedCanvas.getContext('2d');
-                    compressedCanvas.width = img.width;
-                    compressedCanvas.height = img.height;
-                    compCtx.drawImage(img, 0, 0);
-
-                    const compressedDataUrl = compressedCanvas.toDataURL('image/jpeg', quality);
-                    const compressedImg = new Image();
-                    compressedImg.src = compressedDataUrl;
-                    
-                    compressedImg.onload = () => {
-                        compCtx.clearRect(0, 0, compressedCanvas.width, compressedCanvas.height);
-                        compCtx.drawImage(compressedImg, 0, 0);
-                        
-                        const binary = atob(compressedDataUrl.split(',')[1]);
-                        const sizeKB = (binary.length / 1024).toFixed(2);
-                        compressedSize.textContent = `Size: ${sizeKB} KB`;
-
-                        downloadLink.href = compressedDataUrl;
-                        downloadLink.download = 'compressed-image.jpg';
-                        downloadLink.style.display = 'block';
-                    };
-                };
-            };
-
-            reader.readAsDataURL(file);
-        }
-
-        // Tool Embedder Logic
-        let tools = JSON.parse(localStorage.getItem('embeddedTools')) || [];
-
-        function isAdmin() {
-            // Simple admin check (for demo purposes, replace with real authentication)
-            return localStorage.getItem('isAdmin') === 'true';
-        }
-
-        function embedTool() {
-            const code = document.getElementById('toolCodeInput').value.trim();
-            if (!code) {
-                alert('Please enter tool code.');
-                return;
-            }
-
-            const toolNameMatch = code.match(/<h2>(.*?)<\/h2>/i);
-            const toolName = toolNameMatch ? toolNameMatch[1] : 'Unnamed Tool ' + (tools.length + 1);
-            const tool = {
-                id: Date.now(),
-                name: toolName,
-                code: code,
-                isPublic: true
-            };
-
-            tools.push(tool);
-            localStorage.setItem('embeddedTools', JSON.stringify(tools));
-            document.getElementById('toolCodeInput').value = '';
-            updateToolsDisplay();
-        }
-
-        function toggleToolVisibility(id) {
-            tools = tools.map(tool => {
-                if (tool.id === id) {
-                    tool.isPublic = !tool.isPublic;
-                }
-                return tool;
-            });
-            localStorage.setItem('embeddedTools', JSON.stringify(tools));
-            updateToolsDisplay();
-        }
-
-        function deleteTool(id) {
-            if (confirm('Are you sure you want to delete this tool?')) {
-                tools = tools.filter(tool => tool.id !== id);
-                localStorage.setItem('embeddedTools', JSON.stringify(tools));
-                updateToolsDisplay();
-            }
-        }
-
-        function updateToolsDisplay() {
-            const container = document.getElementById('toolsContainer');
-            container.innerHTML = '';
-            const isDark = document.body.classList.contains('dark');
-
-            tools.forEach(tool => {
-                if (!tool.isPublic && !isAdmin()) return; // Hide private tools from non-admins
-
-                const toolDiv = document.createElement('div');
-                toolDiv.className = `tool-item ${!tool.isPublic ? 'tool-private' : ''}`;
-                toolDiv.innerHTML = tool.code;
-
-                if (isAdmin()) {
-                    const controls = document.createElement('div');
-                    controls.className = 'tool-controls';
-                    controls.innerHTML = `
-                        <button onclick="toggleToolVisibility(${tool.id})">${tool.isPublic ? 'Make Private' : 'Make Public'}</button>
-                        <button onclick="deleteTool(${tool.id})">Delete</button>
-                    `;
-                    toolDiv.appendChild(controls);
-                }
-
-                container.appendChild(toolDiv);
-
-                // Execute any script within the tool code
-                const scriptMatch = tool.code.match(/<script>(.*?)<\/script>/is);
-                if (scriptMatch) {
-                    const script = document.createElement('script');
-                    script.text = scriptMatch[1];
-                    toolDiv.appendChild(script);
-                }
-            });
-        }
-
-        // Attach Click Events
         document.querySelectorAll('.category li a').forEach(link => {
             link.addEventListener('click', function(event) {
                 const toolName = this.textContent.trim();
@@ -934,15 +452,11 @@
             });
         });
 
-        document.getElementById('toolsLink').addEventListener('click', showToolsPage);
-
-        // Search Functionality
         const searchInput = document.getElementById('searchInput');
-        const categoryTools = document.querySelectorAll('.category li');
-
+        const toolsList = document.querySelectorAll('.category li');
         searchInput.addEventListener('input', function(e) {
             const searchTerm = e.target.value.toLowerCase();
-            categoryTools.forEach(tool => {
+            toolsList.forEach(tool => {
                 const text = tool.textContent.toLowerCase();
                 if (text.includes(searchTerm)) {
                     tool.style.display = 'flex';
@@ -956,14 +470,7 @@
             });
         });
 
-        // Initial Setup
-        if (isAdmin()) {
-            document.getElementById('embedderPanel').style.display = 'block';
-        }
-        updateToolsDisplay();
-
-        // Example: Set admin status (for testing, remove in production)
-        // localStorage.setItem('isAdmin', 'true');
+        updateToolList();
     </script>
 </body>
 </html>
