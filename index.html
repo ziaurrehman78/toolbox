@@ -346,83 +346,157 @@
             margin: 0 auto;
             max-width: 800px;
             text-align: center;
-            transition: opacity 0.3s ease;
         }
 
         .dark .tool-content {
             background: #2C3E50;
         }
 
-        .tool-embedder-admin {
+        /* Admin Panel Styles */
+        .admin-panel {
             display: none;
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
             z-index: 2000;
-            max-width: 500px;
-            width: 90%;
+            justify-content: center;
+            align-items: center;
         }
 
-        .dark .tool-embedder-admin {
+        .admin-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .dark .admin-content {
             background: #2C3E50;
         }
 
-        .tool-embedder-admin h2 {
+        .admin-content h2 {
             color: var(--primary);
             margin-bottom: 20px;
         }
 
-        .tool-embedder-admin textarea {
+        .admin-content textarea {
             width: 100%;
-            min-height: 100px;
+            height: 200px;
             padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
+            margin-bottom: 20px;
+            border-radius: 10px;
             border: 1px solid var(--secondary);
         }
 
-        .tool-embedder-admin select,
-        .tool-embedder-admin button {
-            padding: 8px 15px;
-            margin: 5px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
+        .admin-content button {
+            padding: 10px 20px;
             background: var(--primary);
             color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-right: 10px;
         }
 
-        .tool-embedder-admin button:hover {
-            background: var(--secondary);
+        .admin-content button:hover {
+            background: var(--accent);
         }
 
-        .tool-card {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            margin: 20px auto;
+        .tool-list {
+            margin-top: 20px;
+        }
+
+        .tool-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid var(--secondary);
+        }
+
+        .tool-item button {
+            background: var(--accent);
+        }
+
+        .tool-item button.toggle {
+            background: var(--highlight);
+        }
+
+        /* Tool Page Styles */
+        .compressor-container {
             max-width: 800px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
+            margin: 0 auto;
+            text-align: center;
         }
 
-        .dark .tool-card {
-            background: #2C3E50;
+        .compressor-header {
+            margin-bottom: 20px;
         }
 
-        .tool-card h3 {
+        .compressor-header h1 {
             color: var(--primary);
-            margin-bottom: 15px;
+            font-size: 28px;
         }
 
-        .tool-card.private {
-            opacity: 0.7;
-            border: 2px dashed var(--accent);
+        .compressor-tool {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin: 20px 0;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .form-group input[type="file"],
+        .form-group input[type="range"] {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .image-preview {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .preview-box {
+            text-align: center;
+        }
+
+        .preview-box h3 {
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+
+        canvas {
+            max-width: 300px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        #downloadLink {
+            display: block;
+            margin-top: 10px;
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        #downloadLink:hover {
+            color: var(--highlight);
         }
 
         @keyframes fadeIn {
@@ -459,6 +533,22 @@
                 max-width: 100%;
             }
         }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+            .icon-3d {
+                width: 50px;
+                height: 50px;
+            }
+            .category h2 {
+                font-size: 18px;
+            }
+            .ad-space {
+                margin: 20px 0;
+            }
+        }
     </style>
 </head>
 <body class="light">
@@ -470,6 +560,7 @@
                 <a href="#">Tools</a>
                 <a href="#">About</a>
                 <a href="#">Contact</a>
+                <a href="#" id="adminLink" style="display: none;">Admin</a>
             </div>
             <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
         </div>
@@ -485,21 +576,6 @@
         </header>
 
         <div id="toolContent" class="tool-content" style="display: none;"></div>
-
-        <!-- Admin Tool Embedder -->
-        <div id="toolEmbedderAdmin" class="tool-embedder-admin">
-            <h2>Tool Code Embedder</h2>
-            <textarea id="toolHtml" placeholder="Paste HTML or full HTML code here"></textarea>
-            <textarea id="toolCss" placeholder="Paste CSS here (optional)"></textarea>
-            <textarea id="toolJs" placeholder="Paste JavaScript here (optional)"></textarea>
-            <input type="text" id="toolName" placeholder="Tool Name">
-            <select id="toolVisibility">
-                <option value="public">Public</option>
-                <option value="private">Private</option>
-            </select>
-            <button onclick="embedTool()">Embed Tool</button>
-            <button onclick="closeEmbedder()">Close</button>
-        </div>
 
         <div class="ad-space">
             <p>[AdSense Placeholder - Insert your AdSense code here]</p>
@@ -517,6 +593,77 @@
                 <ul>
                     <li><span class="tool-icon"></span><a href="#">Tip Calculator</a></li>
                     <li><span class="tool-icon"></span><a href="#">BMI Calculator</a></li>
+                    <li><span class="tool-icon"></span><a href="#">Loan Calculator</a></li>
+                    <li><span class="tool-icon"></span><a href="#">Unit Converter</a></li>
+                    <li><span class="tool-icon"></span><a href="#">Temperature Converter</a></li>
+                    <li><span class="tool-icon"></span><a href="#">Currency Converter</a></li>
+                    <li><span class="tool-icon"></span><a href="#">Age Calculator</a></li>
+                    <li><span class="tool-icon"></span><a href="#">Percentage Calculator</a></li>
+                    <li><span class="tool-icon"></span><a href="#">Time Zone Converter</a></li>
+                    <li><span class="tool-icon"></span><a href="#">Binary/Decimal Converter</a></li>
+                </ul>
+            </div>
+
+            <div class="category gen">
+                <div class="category-header">
+                    <div class="icon-3d">
+                        <div class="icon-face icon-front">⚙️</div>
+                        <div class="icon-face icon-back">⚙️</div>
+                    </div>
+                    <h2>Generators & Utilities</h2>
+                </div>
+                <ul>
+                    <li><span class="tool-icon"></span><a href="#">Password Generator</a></li>
+                    <li><span class="tool-icon"></span><a href="#">Random Number Generator</a></li>
+                    <li><span class="tool-icon"></span><a href="#">QR Code Generator</a></li>
+                    <li><span class="tool-icon"></span><a href="#">Lorem Ipsum Generator</a></li>
+                    <li><span class="tool-icon"></span><a href="#">UUID Generator</a></li>
+                    <li><span class="tool-icon"></span><a href="#">Color Palette Picker</a></li>
+                    <li><span class="tool-icon"></span><a href="#">Gradient Generator</a></li>
+                    <li><span class="tool-icon"></span><a href="#">Countdown Timer</a></li>
+                    <li><span class="tool-icon"></span><a href="#">To-Do List</a></li>
+                    <li><span class="tool-icon"></span><a href="#">Expense Tracker</a></li>
+                </ul>
+            </div>
+
+            <div class="category text">
+                <div class="category-header">
+                    <div class="icon-3d">
+                        <div class="icon-face icon-front">📝</div>
+                        <div class="icon-face icon-back">📝</div>
+                    </div>
+                    <h2>Text & File Tools</h2>
+                </div>
+                <ul>
+                    <li><span class="tool-icon"></span><a href="#">Word Counter</a></li>
+                    <li><span class="tool-icon"></span><a href="#">Text Case Converter</a></li>
+                    <li><span class="tool-icon"></span><a href="#">Markdown Preview</a></li>
+                    <li><span class="tool-icon"></span><a href="#">Base64 Encoder/Decoder</a></li>
+                    <li><span class="tool-icon"></span><a href="#">File Size Converter</a></li>
+                    <li><span class="tool-icon"></span><a href="#">Text Encryption Tool</a></li>
+                    <li><span class="tool-icon"></span><a href="#">Grammar Checker</a></li>
+                    <li><span class="tool-icon"></span><a href="#">CSV to HTML Table</a></li>
+                </ul>
+            </div>
+
+            <div class="category game">
+                <div class="category-header">
+                    <div class="icon-3d">
+                        <div class="icon-face icon-front">🎮</div>
+                        <div class="icon-face icon-back">🎮</div>
+                    </div>
+                    <h2>Games & Interactive Apps</h2>
+                </div>
+                <ul>
+                    <li><span class="tool-icon"></span><a href="#">Tic-Tac-Toe</a></li>
+                    <li><span class="tool-icon"></span><a href="#">Memory Card Game</a></li>
+                    <li><span class="tool-icon"></span><a href="#">Quiz App</a></li>
+                    <li><span class="tool-icon"></span><a href="#">Hangman</a></li>
+                    <li><span class="tool-icon"></span><a href="#">Rock-Paper-Scissors</a></li>
+                    <li><span class="tool-icon"></span><a href="#">Dice Roller</a></li>
+                    <li><span class="tool-icon"></span><a href="#">Puzzle Slider</a></li>
+                    <li><span class="tool-icon"></span><a href="#">Snake Game</a></li>
+                    <li><span class="tool-icon"></span><a href="#">Typing Speed Test</a></li>
                 </ul>
             </div>
 
@@ -529,7 +676,31 @@
                     <h2>Visual & Media Tools</h2>
                 </div>
                 <ul>
+                    <li><span class="tool-icon"></span><a href="#">Drawing App</a></li>
                     <li><span class="tool-icon"></span><a href="#">Image Compressor</a></li>
+                    <li><span class="tool-icon"></span><a href="#">Image Gallery</a></li>
+                    <li><span class="tool-icon"></span><a href="#">Audio Player</a></li>
+                    <li><span class="tool-icon"></span><a href="#">Video Player</a></li>
+                    <li><span class="tool-icon"></span><a href="#">SVG Editor</a></li>
+                    <li><span class="tool-icon"></span><a href="#">Pixel Art Maker</a></li>
+                    <li><span class="tool-icon"></span><a href="#">Color Picker</a></li>
+                    <li><span class="tool-icon"></span><a href="#">Font Preview Tool</a></li>
+                </ul>
+            </div>
+
+            <div class="category life">
+                <div class="category-header">
+                    <div class="icon-3d">
+                        <div class="icon-face icon-front">⏰</div>
+                        <div class="icon-face icon-back">⏰</div>
+                    </div>
+                    <h2>Lifestyle & Productivity</h2>
+                </div>
+                <ul>
+                    <li><span class="tool-icon"></span><a href="#">Habit Tracker</a></li>
+                    <li><span class="tool-icon"></span><a href="#">Recipe Book</a></li>
+                    <li><span class="tool-icon"></span><a href="#">Bookmarks Manager</a></li>
+                    <li><span class="tool-icon"></span><a href="#">Calendar (Static)</a></li>
                 </ul>
             </div>
         </div>
@@ -546,6 +717,18 @@
         <a href="#">Contact Us</a></p>
     </footer>
 
+    <!-- Admin Panel -->
+    <div id="adminPanel" class="admin-panel">
+        <div class="admin-content">
+            <h2>Admin Panel</h2>
+            <input type="text" id="toolName" placeholder="Tool Name" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 10px;">
+            <textarea id="toolCode" placeholder="Paste your HTML/CSS/JavaScript code here"></textarea>
+            <button onclick="embedTool()">Embed Tool</button>
+            <button onclick="closeAdminPanel()">Close</button>
+            <div id="toolList" class="tool-list"></div>
+        </div>
+    </div>
+
     <script>
         // Theme Toggle
         function toggleTheme() {
@@ -557,73 +740,100 @@
             toolContentDiv.style.background = document.body.classList.contains('dark') ? '#2C3E50' : 'white';
         }
 
-        // Show Categories
+        // Back to Categories
         function showCategories() {
             document.getElementById('toolContent').style.display = 'none';
             document.querySelector('.categories').style.display = 'grid';
             document.querySelectorAll('.ad-space').forEach(ad => ad.style.display = 'block');
         }
 
-        // Simulated Admin Check (replace with actual auth logic)
-        const isAdmin = () => {
-            return prompt("Enter admin password:") === "admin123"; // Simple demo check
-        };
+        // Admin Authentication (Simple for demo; replace with secure backend in production)
+        const adminPassword = "admin123"; // Replace with secure authentication
+        let isAdmin = false;
 
-        // Open Embedder for Admin
-        function openEmbedder() {
-            if (isAdmin()) {
-                document.getElementById('toolEmbedderAdmin').style.display = 'block';
-            } else {
-                alert('Admin access only.');
+        function checkAdmin() {
+            if (!isAdmin) {
+                const password = prompt("Enter admin password:");
+                if (password === adminPassword) {
+                    isAdmin = true;
+                    document.getElementById('adminLink').style.display = 'inline-block';
+                } else {
+                    alert("Incorrect password!");
+                }
             }
         }
 
-        // Close Embedder
-        function closeEmbedder() {
-            document.getElementById('toolEmbedderAdmin').style.display = 'none';
+        document.getElementById('adminLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (isAdmin) {
+                document.getElementById('adminPanel').style.display = 'flex';
+                updateToolList();
+            }
+        });
+
+        function closeAdminPanel() {
+            document.getElementById('adminPanel').style.display = 'none';
         }
 
-        // Tool Storage
-        let tools = JSON.parse(localStorage.getItem('embeddedTools')) || {};
+        // Tool Management
+        let tools = JSON.parse(localStorage.getItem('tools')) || {};
 
-        // Embed Tool
         function embedTool() {
-            const html = document.getElementById('toolHtml').value;
-            const css = document.getElementById('toolCss').value;
-            const js = document.getElementById('toolJs').value;
-            const name = document.getElementById('toolName').value.trim();
-            const visibility = document.getElementById('toolVisibility').value;
-
-            if (!name || !html) {
-                alert('Tool name and HTML are required.');
+            const toolName = document.getElementById('toolName').value.trim();
+            const toolCode = document.getElementById('toolCode').value.trim();
+            if (!toolName || !toolCode) {
+                alert('Please enter both a tool name and code.');
                 return;
             }
-
-            tools[name] = {
-                html: html,
-                css: css,
-                js: js,
-                visibility: visibility
-            };
-
-            localStorage.setItem('embeddedTools', JSON.stringify(tools));
-            alert(`${name} has been embedded successfully!`);
-            closeEmbedder();
+            tools[toolName] = { code: toolCode, isPublic: true };
+            localStorage.setItem('tools', JSON.stringify(tools));
             updateToolLinks();
+            updateToolList();
+            document.getElementById('toolName').value = '';
+            document.getElementById('toolCode').value = '';
+            alert(`${toolName} has been embedded successfully!`);
         }
 
-        // Update Tool Links
+        function updateToolList() {
+            const toolList = document.getElementById('toolList');
+            toolList.innerHTML = '';
+            for (const [name, tool] of Object.entries(tools)) {
+                const div = document.createElement('div');
+                div.className = 'tool-item';
+                div.innerHTML = `
+                    <span>${name} (${tool.isPublic ? 'Public' : 'Private'})</span>
+                    <div>
+                        <button class="toggle" onclick="toggleTool('${name}')">${tool.isPublic ? 'Make Private' : 'Make Public'}</button>
+                        <button onclick="deleteTool('${name}')">Delete</button>
+                    </div>
+                `;
+                toolList.appendChild(div);
+            }
+        }
+
+        function toggleTool(toolName) {
+            tools[toolName].isPublic = !tools[toolName].isPublic;
+            localStorage.setItem('tools', JSON.stringify(tools));
+            updateToolLinks();
+            updateToolList();
+        }
+
+        function deleteTool(toolName) {
+            if (confirm(`Are you sure you want to delete ${toolName}?`)) {
+                delete tools[toolName];
+                localStorage.setItem('tools', JSON.stringify(tools));
+                updateToolLinks();
+                updateToolList();
+            }
+        }
+
         function updateToolLinks() {
-            Object.keys(tools).forEach(toolName => {
-                let category = 'calc'; // Default category, adjust as needed
-                if (toolName.toLowerCase().includes('image')) category = 'visual';
-                
-                const categoryUl = document.querySelector(`.category.${category} ul`);
-                if (!document.querySelector(`a[data-tool="${toolName}"]`)) {
-                    const li = document.createElement('li');
-                    li.innerHTML = `<span class="tool-icon"></span><a href="#" data-tool="${toolName}">${toolName}</a>`;
-                    categoryUl.appendChild(li);
-                    li.querySelector('a').addEventListener('click', (e) => loadToolContent(toolName, e));
+            document.querySelectorAll('.category li a').forEach(link => {
+                const toolName = link.textContent.trim();
+                if (tools[toolName] && !tools[toolName].isPublic) {
+                    link.style.display = 'none';
+                } else {
+                    link.style.display = 'inline';
                 }
             });
         }
@@ -637,117 +847,75 @@
             categoriesDiv.style.display = 'none';
             adSpaces.forEach(ad => ad.style.display = 'none');
             toolContentDiv.style.display = 'block';
-            toolContentDiv.innerHTML = '';
 
             let content = `
                 <div class="ad-space" style="margin-bottom: 30px;">
-                    <p>[AdSense Placeholder]</p>
+                    <p>[AdSense Placeholder - Insert your AdSense code here]</p>
                 </div>
                 <button onclick="showCategories()" style="margin-bottom: 20px; padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 10px; cursor: pointer;">Back to Tools</button>
             `;
 
-            if (tools[toolName]) {
-                const tool = tools[toolName];
-                const isPublic = tool.visibility === 'public';
-                if (!isPublic && !isAdmin()) {
-                    content += `<p>This tool is private. Admin access required.</p>`;
-                } else {
-                    content += `
-                        <div class="tool-card ${tool.visibility}">
-                            <h3>${toolName}</h3>
-                            ${tool.html}
-                        </div>
-                    `;
-                    if (tool.css) {
-                        const style = document.createElement('style');
-                        style.textContent = tool.css;
-                        document.head.appendChild(style);
-                    }
-                    if (tool.js) {
-                        const script = document.createElement('script');
-                        script.textContent = tool.js;
-                        document.body.appendChild(script);
-                    }
-                }
-                if (isAdmin()) {
-                    content += `
-                        <button onclick="deleteTool('${toolName}')" style="margin-top: 20px; padding: 10px 20px; background: var(--accent); color: white; border: none; border-radius: 10px; cursor: pointer;">Delete Tool</button>
-                        <button onclick="openEmbedder()" style="margin-top: 20px; padding: 10px 20px; background: var(--secondary); color: white; border: none; border-radius: 10px; cursor: pointer;">Add New Tool</button>
-                    `;
-                }
+            if (tools[toolName] && tools[toolName].isPublic) {
+                content += tools[toolName].code;
             } else if (toolName === 'Tip Calculator') {
                 content += `
-                    <div class="tool-card">
-                        <h3>Tip Calculator</h3>
+                    <h2>Tip Calculator</h2>
+                    <div style="margin-top: 20px;">
                         <label>Bill Amount: <input type="number" id="billAmount" placeholder="Enter amount" style="padding: 10px; margin: 10px 0;"></label><br>
                         <label>Tip Percentage: <input type="number" id="tipPercentage" placeholder="Enter %" value="15" style="padding: 10px; margin: 10px 0;"></label><br>
                         <button onclick="calculateTip()" style="padding: 10px 20px; background: var(--secondary); color: white; border: none; border-radius: 10px; cursor: pointer;">Calculate</button>
                         <p id="tipResult" style="margin-top: 20px;"></p>
                     </div>
                 `;
-                if (isAdmin()) {
-                    content += `
-                        <button onclick="openEmbedder()" style="margin-top: 20px; padding: 10px 20px; background: var(--secondary); color: white; border: none; border-radius: 10px; cursor: pointer;">Add New Tool</button>
-                    `;
-                }
             } else if (toolName === 'Image Compressor') {
                 content += `
-                    <div class="tool-card">
-                        <h3>Image Compressor</h3>
-                        <div class="form-group">
-                            <label for="imageInput">Select Image:</label>
-                            <input type="file" id="imageInput" accept="image/*">
+                    <div class="compressor-container">
+                        <div class="compressor-header">
+                            <h1>Image Compressor</h1>
+                            <p>Optimize your images with custom compression levels</p>
                         </div>
-                        <div class="form-group">
-                            <label for="compressionLevel">Compression Level: <span id="compressionValue">50</span>%</label>
-                            <input type="range" id="compressionLevel" min="0" max="100" value="50">
-                        </div>
-                        <button onclick="compressImage()" style="padding: 12px 25px; background: var(--primary); color: white; border: none; border-radius: 25px; cursor: pointer;">Compress Image</button>
-                        <div class="image-preview">
-                            <div class="preview-box">
-                                <h3>Original</h3>
-                                <canvas id="originalCanvas"></canvas>
-                                <p id="originalSize"></p>
+                        <section class="compressor-tool">
+                            <div class="form-group">
+                                <label for="imageInput">Select Image:</label>
+                                <input type="file" id="imageInput" accept="image/*">
                             </div>
-                            <div class="preview-box">
-                                <h3>Compressed</h3>
-                                <canvas id="compressedCanvas"></canvas>
-                                <p id="compressedSize"></p>
-                                <a id="downloadLink" style="display: none;">Download Compressed Image</a>
+                            <div class="form-group">
+                                <label for="compressionLevel">Compression Level: <span id="compressionValue">50</span>%</label>
+                                <input type="range" id="compressionLevel" min="0" max="100" value="50" oninput="document.getElementById('compressionValue').textContent = this.value">
                             </div>
-                        </div>
+                            <button onclick="compressImage()" style="padding: 12px 25px; background: var(--primary); color: white; border: none; border-radius: 25px; cursor: pointer;">Compress Image</button>
+                            <div class="image-preview">
+                                <div class="preview-box">
+                                    <h3>Original</h3>
+                                    <canvas id="originalCanvas"></canvas>
+                                    <p id="originalSize"></p>
+                                </div>
+                                <div class="preview-box">
+                                    <h3>Compressed</h3>
+                                    <canvas id="compressedCanvas"></canvas>
+                                    <p id="compressedSize"></p>
+                                    <a id="downloadLink" style="display: none;">Download Compressed Image</a>
+                                </div>
+                            </div>
+                        </section>
                     </div>
                 `;
-                if (isAdmin()) {
-                    content += `
-                        <button onclick="openEmbedder()" style="margin-top: 20px; padding: 10px 20px; background: var(--secondary); color: white; border: none; border-radius: 10px; cursor: pointer;">Add New Tool</button>
-                    `;
-                }
             } else {
                 content += `<h2>${toolName}</h2><p>Tool coming soon!</p>`;
-                if (isAdmin()) {
-                    content += `
-                        <button onclick="openEmbedder()" style="margin-top: 20px; padding: 10px 20px; background: var(--secondary); color: white; border: none; border-radius: 10px; cursor: pointer;">Add New Tool</button>
-                    `;
-                }
             }
 
             content += `
                 <div class="ad-space" style="margin-top: 30px;">
-                    <p>[AdSense Placeholder]</p>
+                    <p>[AdSense Placeholder - Insert your AdSense code here]</p>
                 </div>
             `;
 
             toolContentDiv.innerHTML = content;
-        }
 
-        // Delete Tool
-        function deleteTool(toolName) {
-            if (confirm(`Are you sure you want to delete ${toolName}?`)) {
-                delete tools[toolName];
-                localStorage.setItem('embeddedTools', JSON.stringify(tools));
-                document.querySelector(`a[data-tool="${toolName}"]`).parentElement.remove();
-                showCategories();
+            // Execute any inline scripts in the embedded tool code
+            const scripts = toolContentDiv.getElementsByTagName('script');
+            for (let i = 0; i < scripts.length; i++) {
+                eval(scripts[i].innerHTML);
             }
         }
 
@@ -767,7 +935,6 @@
             `;
         }
 
-        // Image Compressor Logic
         function compressImage() {
             const imageInput = document.getElementById('imageInput');
             const compressionLevel = document.getElementById('compressionLevel');
@@ -778,7 +945,6 @@
             const compressedSize = document.getElementById('compressedSize');
             const downloadLink = document.getElementById('downloadLink');
 
-            compressionValue.textContent = compressionLevel.value;
             const file = imageInput.files[0];
             if (!file) {
                 alert('Please select an image first');
@@ -842,7 +1008,7 @@
             const searchTerm = e.target.value.toLowerCase();
             toolsList.forEach(tool => {
                 const text = tool.textContent.toLowerCase();
-                if (text.includes(searchTerm)) {
+                if (text.includes(searchTerm) && (!tools[text.trim()] || tools[text.trim()].isPublic)) {
                     tool.style.display = 'flex';
                     tool.parentElement.parentElement.style.display = 'block';
                 } else {
@@ -854,16 +1020,10 @@
             });
         });
 
-        // Initialize Embedded Tools
-        window.onload = () => {
+        // Initialize
+        window.onload = function() {
+            checkAdmin();
             updateToolLinks();
-            if (isAdmin()) {
-                const adminButton = document.createElement('button');
-                adminButton.textContent = 'Manage Tools';
-                adminButton.style = 'position: fixed; bottom: 20px; right: 20px; padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 10px; cursor: pointer;';
-                adminButton.onclick = openEmbedder;
-                document.body.appendChild(adminButton);
-            }
         };
     </script>
 </body>
