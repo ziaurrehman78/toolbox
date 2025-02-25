@@ -346,15 +346,14 @@
             margin: 0 auto;
             max-width: 800px;
             text-align: center;
-            position: relative;
+            transition: opacity 0.3s ease;
         }
 
         .dark .tool-content {
             background: #2C3E50;
         }
 
-        /* Embedder Styles */
-        #toolEmbedderPanel {
+        .tool-embedder-admin {
             display: none;
             position: fixed;
             top: 50%;
@@ -363,80 +362,67 @@
             background: white;
             padding: 20px;
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             z-index: 2000;
-            width: 500px;
-            max-height: 80vh;
-            overflow-y: auto;
+            max-width: 500px;
+            width: 90%;
         }
 
-        .dark #toolEmbedderPanel {
+        .dark .tool-embedder-admin {
             background: #2C3E50;
         }
 
-        #toolEmbedderPanel h2 {
+        .tool-embedder-admin h2 {
             color: var(--primary);
             margin-bottom: 20px;
         }
 
-        #toolEmbedderPanel label {
-            display: block;
-            margin: 10px 0 5px;
-            font-weight: 500;
-        }
-
-        #toolEmbedderPanel textarea, #toolEmbedderPanel input {
+        .tool-embedder-admin textarea {
             width: 100%;
+            min-height: 100px;
             padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
+            margin-bottom: 10px;
             border-radius: 5px;
-            resize: vertical;
+            border: 1px solid var(--secondary);
         }
 
-        #toolEmbedderPanel button {
-            padding: 10px 20px;
+        .tool-embedder-admin select,
+        .tool-embedder-admin button {
+            padding: 8px 15px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
             background: var(--primary);
             color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            margin-right: 10px;
         }
 
-        #toolEmbedderPanel button:hover {
+        .tool-embedder-admin button:hover {
             background: var(--secondary);
         }
 
         .tool-card {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            padding: 20px;
+            background: white;
             border-radius: 15px;
-            margin: 20px 0;
-            color: white;
-            position: relative;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 800px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
         }
 
-        .tool-card.private {
-            background: linear-gradient(135deg, #666, #999);
-            opacity: 0.8;
+        .dark .tool-card {
+            background: #2C3E50;
         }
 
         .tool-card h3 {
-            margin-bottom: 10px;
+            color: var(--primary);
+            margin-bottom: 15px;
         }
 
-        .tool-actions {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .tool-actions button {
-            padding: 5px 10px;
-            font-size: 12px;
+        .tool-card.private {
+            opacity: 0.7;
+            border: 2px dashed var(--accent);
         }
 
         @keyframes fadeIn {
@@ -472,9 +458,6 @@
                 padding: 20px;
                 max-width: 100%;
             }
-            #toolEmbedderPanel {
-                width: 90%;
-            }
         }
     </style>
 </head>
@@ -501,50 +484,21 @@
             </div>
         </header>
 
-        <div id="toolContent" class="tool-content" style="display: none;">
-            <div id="adminEmbedderBtn" style="display: none; position: absolute; top: 10px; right: 10px;">
-                <button onclick="toggleEmbedder()">Tool Embedder</button>
-            </div>
-            <div id="embeddedTools"></div>
-        </div>
+        <div id="toolContent" class="tool-content" style="display: none;"></div>
 
-        <div id="toolEmbedderPanel">
+        <!-- Admin Tool Embedder -->
+        <div id="toolEmbedderAdmin" class="tool-embedder-admin">
             <h2>Tool Code Embedder</h2>
-            <form id="toolEmbedderForm">
-                <label for="toolName">Tool Name:</label>
-                <input type="text" id="toolName" required>
-                
-                <label for="toolType">Tool Type:</label>
-                <select id="toolType" onchange="toggleCodeInputs()">
-                    <option value="single">Single HTML File</option>
-                    <option value="separate">Separate HTML/CSS/JS</option>
-                </select>
-
-                <div id="singleCodeInput">
-                    <label for="singleCode">Complete HTML Code:</label>
-                    <textarea id="singleCode" rows="6" placeholder="Paste complete HTML code here"></textarea>
-                </div>
-
-                <div id="separateCodeInput" style="display: none;">
-                    <label for="htmlCode">HTML Code:</label>
-                    <textarea id="htmlCode" rows="4" placeholder="Paste HTML code here"></textarea>
-                    
-                    <label for="cssCode">CSS Code:</label>
-                    <textarea id="cssCode" rows="4" placeholder="Paste CSS code here"></textarea>
-                    
-                    <label for="jsCode">JavaScript Code:</label>
-                    <textarea id="jsCode" rows="4" placeholder="Paste JS code here"></textarea>
-                </div>
-
-                <label for="isPublic">Visibility:</label>
-                <select id="isPublic">
-                    <option value="true">Public</option>
-                    <option value="false">Private</option>
-                </select>
-
-                <button type="submit">Embed Tool</button>
-                <button type="button" onclick="toggleEmbedder()">Close</button>
-            </form>
+            <textarea id="toolHtml" placeholder="Paste HTML or full HTML code here"></textarea>
+            <textarea id="toolCss" placeholder="Paste CSS here (optional)"></textarea>
+            <textarea id="toolJs" placeholder="Paste JavaScript here (optional)"></textarea>
+            <input type="text" id="toolName" placeholder="Tool Name">
+            <select id="toolVisibility">
+                <option value="public">Public</option>
+                <option value="private">Private</option>
+            </select>
+            <button onclick="embedTool()">Embed Tool</button>
+            <button onclick="closeEmbedder()">Close</button>
         </div>
 
         <div class="ad-space">
@@ -563,77 +517,6 @@
                 <ul>
                     <li><span class="tool-icon"></span><a href="#">Tip Calculator</a></li>
                     <li><span class="tool-icon"></span><a href="#">BMI Calculator</a></li>
-                    <li><span class="tool-icon"></span><a href="#">Loan Calculator</a></li>
-                    <li><span class="tool-icon"></span><a href="#">Unit Converter</a></li>
-                    <li><span class="tool-icon"></span><a href="#">Temperature Converter</a></li>
-                    <li><span class="tool-icon"></span><a href="#">Currency Converter</a></li>
-                    <li><span class="tool-icon"></span><a href="#">Age Calculator</a></li>
-                    <li><span class="tool-icon"></span><a href="#">Percentage Calculator</a></li>
-                    <li><span class="tool-icon"></span><a href="#">Time Zone Converter</a></li>
-                    <li><span class="tool-icon"></span><a href="#">Binary/Decimal Converter</a></li>
-                </ul>
-            </div>
-
-            <div class="category gen">
-                <div class="category-header">
-                    <div class="icon-3d">
-                        <div class="icon-face icon-front">⚙️</div>
-                        <div class="icon-face icon-back">⚙️</div>
-                    </div>
-                    <h2>Generators & Utilities</h2>
-                </div>
-                <ul>
-                    <li><span class="tool-icon"></span><a href="#">Password Generator</a></li>
-                    <li><span class="tool-icon"></span><a href="#">Random Number Generator</a></li>
-                    <li><span class="tool-icon"></span><a href="#">QR Code Generator</a></li>
-                    <li><span class="tool-icon"></span><a href="#">Lorem Ipsum Generator</a></li>
-                    <li><span class="tool-icon"></span><a href="#">UUID Generator</a></li>
-                    <li><span class="tool-icon"></span><a href="#">Color Palette Picker</a></li>
-                    <li><span class="tool-icon"></span><a href="#">Gradient Generator</a></li>
-                    <li><span class="tool-icon"></span><a href="#">Countdown Timer</a></li>
-                    <li><span class="tool-icon"></span><a href="#">To-Do List</a></li>
-                    <li><span class="tool-icon"></span><a href="#">Expense Tracker</a></li>
-                </ul>
-            </div>
-
-            <div class="category text">
-                <div class="category-header">
-                    <div class="icon-3d">
-                        <div class="icon-face icon-front">📝</div>
-                        <div class="icon-face icon-back">📝</div>
-                    </div>
-                    <h2>Text & File Tools</h2>
-                </div>
-                <ul>
-                    <li><span class="tool-icon"></span><a href="#">Word Counter</a></li>
-                    <li><span class="tool-icon"></span><a href="#">Text Case Converter</a></li>
-                    <li><span class="tool-icon"></span><a href="#">Markdown Preview</a></li>
-                    <li><span class="tool-icon"></span><a href="#">Base64 Encoder/Decoder</a></li>
-                    <li><span class="tool-icon"></span><a href="#">File Size Converter</a></li>
-                    <li><span class="tool-icon"></span><a href="#">Text Encryption Tool</a></li>
-                    <li><span class="tool-icon"></span><a href="#">Grammar Checker</a></li>
-                    <li><span class="tool-icon"></span><a href="#">CSV to HTML Table</a></li>
-                </ul>
-            </div>
-
-            <div class="category game">
-                <div class="category-header">
-                    <div class="icon-3d">
-                        <div class="icon-face icon-front">🎮</div>
-                        <div class="icon-face icon-back">🎮</div>
-                    </div>
-                    <h2>Games & Interactive Apps</h2>
-                </div>
-                <ul>
-                    <li><span class="tool-icon"></span><a href="#">Tic-Tac-Toe</a></li>
-                    <li><span class="tool-icon"></span><a href="#">Memory Card Game</a></li>
-                    <li><span class="tool-icon"></span><a href="#">Quiz App</a></li>
-                    <li><span class="tool-icon"></span><a href="#">Hangman</a></li>
-                    <li><span class="tool-icon"></span><a href="#">Rock-Paper-Scissors</a></li>
-                    <li><span class="tool-icon"></span><a href="#">Dice Roller</a></li>
-                    <li><span class="tool-icon"></span><a href="#">Puzzle Slider</a></li>
-                    <li><span class="tool-icon"></span><a href="#">Snake Game</a></li>
-                    <li><span class="tool-icon"></span><a href="#">Typing Speed Test</a></li>
                 </ul>
             </div>
 
@@ -646,31 +529,7 @@
                     <h2>Visual & Media Tools</h2>
                 </div>
                 <ul>
-                    <li><span class="tool-icon"></span><a href="#">Drawing App</a></li>
                     <li><span class="tool-icon"></span><a href="#">Image Compressor</a></li>
-                    <li><span class="tool-icon"></span><a href="#">Image Gallery</a></li>
-                    <li><span class="tool-icon"></span><a href="#">Audio Player</a></li>
-                    <li><span class="tool-icon"></span><a href="#">Video Player</a></li>
-                    <li><span class="tool-icon"></span><a href="#">SVG Editor</a></li>
-                    <li><span class="tool-icon"></span><a href="#">Pixel Art Maker</a></li>
-                    <li><span class="tool-icon"></span><a href="#">Color Picker</a></li>
-                    <li><span class="tool-icon"></span><a href="#">Font Preview Tool</a></li>
-                </ul>
-            </div>
-
-            <div class="category life">
-                <div class="category-header">
-                    <div class="icon-3d">
-                        <div class="icon-face icon-front">⏰</div>
-                        <div class="icon-face icon-back">⏰</div>
-                    </div>
-                    <h2>Lifestyle & Productivity</h2>
-                </div>
-                <ul>
-                    <li><span class="tool-icon"></span><a href="#">Habit Tracker</a></li>
-                    <li><span class="tool-icon"></span><a href="#">Recipe Book</a></li>
-                    <li><span class="tool-icon"></span><a href="#">Bookmarks Manager</a></li>
-                    <li><span class="tool-icon"></span><a href="#">Calendar (Static)</a></li>
                 </ul>
             </div>
         </div>
@@ -698,70 +557,87 @@
             toolContentDiv.style.background = document.body.classList.contains('dark') ? '#2C3E50' : 'white';
         }
 
-        // Back to Categories
+        // Show Categories
         function showCategories() {
             document.getElementById('toolContent').style.display = 'none';
             document.querySelector('.categories').style.display = 'grid';
             document.querySelectorAll('.ad-space').forEach(ad => ad.style.display = 'block');
         }
 
-        // Tool Embedder Storage
-        let embeddedTools = JSON.parse(localStorage.getItem('embeddedTools')) || {};
+        // Simulated Admin Check (replace with actual auth logic)
+        const isAdmin = () => {
+            return prompt("Enter admin password:") === "admin123"; // Simple demo check
+        };
 
-        // Admin Check (Simple example, replace with real authentication)
-        const isAdmin = true; // Set to false for visitors, implement real auth in production
-        if (isAdmin) {
-            document.getElementById('adminEmbedderBtn').style.display = 'block';
+        // Open Embedder for Admin
+        function openEmbedder() {
+            if (isAdmin()) {
+                document.getElementById('toolEmbedderAdmin').style.display = 'block';
+            } else {
+                alert('Admin access only.');
+            }
         }
 
-        // Toggle Embedder Panel
-        function toggleEmbedder() {
-            const panel = document.getElementById('toolEmbedderPanel');
-            panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+        // Close Embedder
+        function closeEmbedder() {
+            document.getElementById('toolEmbedderAdmin').style.display = 'none';
         }
 
-        // Toggle Code Input Fields
-        function toggleCodeInputs() {
-            const toolType = document.getElementById('toolType').value;
-            document.getElementById('singleCodeInput').style.display = toolType === 'single' ? 'block' : 'none';
-            document.getElementById('separateCodeInput').style.display = toolType === 'separate' ? 'block' : 'none';
-        }
+        // Tool Storage
+        let tools = JSON.parse(localStorage.getItem('embeddedTools')) || {};
 
         // Embed Tool
-        document.getElementById('toolEmbedderForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const toolName = document.getElementById('toolName').value;
-            const toolType = document.getElementById('toolType').value;
-            const isPublic = document.getElementById('isPublic').value === 'true';
+        function embedTool() {
+            const html = document.getElementById('toolHtml').value;
+            const css = document.getElementById('toolCss').value;
+            const js = document.getElementById('toolJs').value;
+            const name = document.getElementById('toolName').value.trim();
+            const visibility = document.getElementById('toolVisibility').value;
 
-            let toolData = { name: toolName, isPublic };
-
-            if (toolType === 'single') {
-                toolData.singleCode = document.getElementById('singleCode').value;
-            } else {
-                toolData.html = document.getElementById('htmlCode').value;
-                toolData.css = document.getElementById('cssCode').value;
-                toolData.js = document.getElementById('jsCode').value;
+            if (!name || !html) {
+                alert('Tool name and HTML are required.');
+                return;
             }
 
-            embeddedTools[toolName] = toolData;
-            localStorage.setItem('embeddedTools', JSON.stringify(embeddedTools));
-            loadToolContent(toolName, null);
-            toggleEmbedder();
-            this.reset();
-        });
+            tools[name] = {
+                html: html,
+                css: css,
+                js: js,
+                visibility: visibility
+            };
+
+            localStorage.setItem('embeddedTools', JSON.stringify(tools));
+            alert(`${name} has been embedded successfully!`);
+            closeEmbedder();
+            updateToolLinks();
+        }
+
+        // Update Tool Links
+        function updateToolLinks() {
+            Object.keys(tools).forEach(toolName => {
+                let category = 'calc'; // Default category, adjust as needed
+                if (toolName.toLowerCase().includes('image')) category = 'visual';
+                
+                const categoryUl = document.querySelector(`.category.${category} ul`);
+                if (!document.querySelector(`a[data-tool="${toolName}"]`)) {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<span class="tool-icon"></span><a href="#" data-tool="${toolName}">${toolName}</a>`;
+                    categoryUl.appendChild(li);
+                    li.querySelector('a').addEventListener('click', (e) => loadToolContent(toolName, e));
+                }
+            });
+        }
 
         // Load Tool Content
         function loadToolContent(toolName, event) {
-            if (event) event.preventDefault();
+            event.preventDefault();
             const toolContentDiv = document.getElementById('toolContent');
-            const embeddedToolsDiv = document.getElementById('embeddedTools');
             const categoriesDiv = document.querySelector('.categories');
             const adSpaces = document.querySelectorAll('.ad-space');
             categoriesDiv.style.display = 'none';
             adSpaces.forEach(ad => ad.style.display = 'none');
             toolContentDiv.style.display = 'block';
-            embeddedToolsDiv.innerHTML = '';
+            toolContentDiv.innerHTML = '';
 
             let content = `
                 <div class="ad-space" style="margin-bottom: 30px;">
@@ -770,50 +646,90 @@
                 <button onclick="showCategories()" style="margin-bottom: 20px; padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 10px; cursor: pointer;">Back to Tools</button>
             `;
 
-            if (embeddedTools[toolName]) {
-                const tool = embeddedTools[toolName];
-                content += `
-                    <div class="tool-card ${tool.isPublic ? '' : 'private'}">
-                        <h3>${tool.name}</h3>
-                        <div class="tool-actions">
-                            ${isAdmin ? `<button onclick="toggleToolVisibility('${toolName}')">${tool.isPublic ? 'Make Private' : 'Make Public'}</button>` : ''}
-                            ${isAdmin ? `<button onclick="deleteTool('${toolName}')">Delete</button>` : ''}
-                        </div>
-                        <div class="tool-body">
-                `;
-
-                if (tool.singleCode) {
-                    content += tool.singleCode;
+            if (tools[toolName]) {
+                const tool = tools[toolName];
+                const isPublic = tool.visibility === 'public';
+                if (!isPublic && !isAdmin()) {
+                    content += `<p>This tool is private. Admin access required.</p>`;
                 } else {
                     content += `
-                        <style>${tool.css}</style>
-                        ${tool.html}
-                        <script>${tool.js}<\/script>
+                        <div class="tool-card ${tool.visibility}">
+                            <h3>${toolName}</h3>
+                            ${tool.html}
+                        </div>
                     `;
+                    if (tool.css) {
+                        const style = document.createElement('style');
+                        style.textContent = tool.css;
+                        document.head.appendChild(style);
+                    }
+                    if (tool.js) {
+                        const script = document.createElement('script');
+                        script.textContent = tool.js;
+                        document.body.appendChild(script);
+                    }
                 }
-
-                content += `</div></div>`;
-                if (tool.isPublic || isAdmin) {
-                    embeddedToolsDiv.innerHTML = content;
-                } else {
-                    embeddedToolsDiv.innerHTML = '<p>This tool is private.</p>';
+                if (isAdmin()) {
+                    content += `
+                        <button onclick="deleteTool('${toolName}')" style="margin-top: 20px; padding: 10px 20px; background: var(--accent); color: white; border: none; border-radius: 10px; cursor: pointer;">Delete Tool</button>
+                        <button onclick="openEmbedder()" style="margin-top: 20px; padding: 10px 20px; background: var(--secondary); color: white; border: none; border-radius: 10px; cursor: pointer;">Add New Tool</button>
+                    `;
                 }
             } else if (toolName === 'Tip Calculator') {
                 content += `
                     <div class="tool-card">
                         <h3>Tip Calculator</h3>
-                        <div style="margin-top: 20px;">
-                            <label>Bill Amount: <input type="number" id="billAmount" placeholder="Enter amount" style="padding: 10px; margin: 10px 0;"></label><br>
-                            <label>Tip Percentage: <input type="number" id="tipPercentage" placeholder="Enter %" value="15" style="padding: 10px; margin: 10px 0;"></label><br>
-                            <button onclick="calculateTip()" style="padding: 10px 20px; background: var(--secondary); color: white; border: none; border-radius: 10px; cursor: pointer;">Calculate</button>
-                            <p id="tipResult" style="margin-top: 20px;"></p>
+                        <label>Bill Amount: <input type="number" id="billAmount" placeholder="Enter amount" style="padding: 10px; margin: 10px 0;"></label><br>
+                        <label>Tip Percentage: <input type="number" id="tipPercentage" placeholder="Enter %" value="15" style="padding: 10px; margin: 10px 0;"></label><br>
+                        <button onclick="calculateTip()" style="padding: 10px 20px; background: var(--secondary); color: white; border: none; border-radius: 10px; cursor: pointer;">Calculate</button>
+                        <p id="tipResult" style="margin-top: 20px;"></p>
+                    </div>
+                `;
+                if (isAdmin()) {
+                    content += `
+                        <button onclick="openEmbedder()" style="margin-top: 20px; padding: 10px 20px; background: var(--secondary); color: white; border: none; border-radius: 10px; cursor: pointer;">Add New Tool</button>
+                    `;
+                }
+            } else if (toolName === 'Image Compressor') {
+                content += `
+                    <div class="tool-card">
+                        <h3>Image Compressor</h3>
+                        <div class="form-group">
+                            <label for="imageInput">Select Image:</label>
+                            <input type="file" id="imageInput" accept="image/*">
+                        </div>
+                        <div class="form-group">
+                            <label for="compressionLevel">Compression Level: <span id="compressionValue">50</span>%</label>
+                            <input type="range" id="compressionLevel" min="0" max="100" value="50">
+                        </div>
+                        <button onclick="compressImage()" style="padding: 12px 25px; background: var(--primary); color: white; border: none; border-radius: 25px; cursor: pointer;">Compress Image</button>
+                        <div class="image-preview">
+                            <div class="preview-box">
+                                <h3>Original</h3>
+                                <canvas id="originalCanvas"></canvas>
+                                <p id="originalSize"></p>
+                            </div>
+                            <div class="preview-box">
+                                <h3>Compressed</h3>
+                                <canvas id="compressedCanvas"></canvas>
+                                <p id="compressedSize"></p>
+                                <a id="downloadLink" style="display: none;">Download Compressed Image</a>
+                            </div>
                         </div>
                     </div>
                 `;
-                embeddedToolsDiv.innerHTML = content;
+                if (isAdmin()) {
+                    content += `
+                        <button onclick="openEmbedder()" style="margin-top: 20px; padding: 10px 20px; background: var(--secondary); color: white; border: none; border-radius: 10px; cursor: pointer;">Add New Tool</button>
+                    `;
+                }
             } else {
                 content += `<h2>${toolName}</h2><p>Tool coming soon!</p>`;
-                embeddedToolsDiv.innerHTML = content;
+                if (isAdmin()) {
+                    content += `
+                        <button onclick="openEmbedder()" style="margin-top: 20px; padding: 10px 20px; background: var(--secondary); color: white; border: none; border-radius: 10px; cursor: pointer;">Add New Tool</button>
+                    `;
+                }
             }
 
             content += `
@@ -821,21 +737,18 @@
                     <p>[AdSense Placeholder]</p>
                 </div>
             `;
-            embeddedToolsDiv.innerHTML = content;
-        }
 
-        // Toggle Tool Visibility
-        function toggleToolVisibility(toolName) {
-            embeddedTools[toolName].isPublic = !embeddedTools[toolName].isPublic;
-            localStorage.setItem('embeddedTools', JSON.stringify(embeddedTools));
-            loadToolContent(toolName, null);
+            toolContentDiv.innerHTML = content;
         }
 
         // Delete Tool
         function deleteTool(toolName) {
-            delete embeddedTools[toolName];
-            localStorage.setItem('embeddedTools', JSON.stringify(embeddedTools));
-            showCategories();
+            if (confirm(`Are you sure you want to delete ${toolName}?`)) {
+                delete tools[toolName];
+                localStorage.setItem('embeddedTools', JSON.stringify(tools));
+                document.querySelector(`a[data-tool="${toolName}"]`).parentElement.remove();
+                showCategories();
+            }
         }
 
         // Tip Calculator Logic
@@ -854,6 +767,65 @@
             `;
         }
 
+        // Image Compressor Logic
+        function compressImage() {
+            const imageInput = document.getElementById('imageInput');
+            const compressionLevel = document.getElementById('compressionLevel');
+            const compressionValue = document.getElementById('compressionValue');
+            const originalCanvas = document.getElementById('originalCanvas');
+            const compressedCanvas = document.getElementById('compressedCanvas');
+            const originalSize = document.getElementById('originalSize');
+            const compressedSize = document.getElementById('compressedSize');
+            const downloadLink = document.getElementById('downloadLink');
+
+            compressionValue.textContent = compressionLevel.value;
+            const file = imageInput.files[0];
+            if (!file) {
+                alert('Please select an image first');
+                return;
+            }
+
+            const img = new Image();
+            const reader = new FileReader();
+
+            reader.onload = async (e) => {
+                img.src = e.target.result;
+
+                img.onload = async () => {
+                    const origCtx = originalCanvas.getContext('2d');
+                    originalCanvas.width = img.width;
+                    originalCanvas.height = img.height;
+                    origCtx.drawImage(img, 0, 0);
+                    originalSize.textContent = `Size: ${(file.size / 1024).toFixed(2)} KB`;
+
+                    const quality = (100 - compressionLevel.value) / 100;
+                    const compCtx = compressedCanvas.getContext('2d');
+                    compressedCanvas.width = img.width;
+                    compressedCanvas.height = img.height;
+                    compCtx.drawImage(img, 0, 0);
+
+                    const compressedDataUrl = compressedCanvas.toDataURL('image/jpeg', quality);
+                    const compressedImg = new Image();
+                    compressedImg.src = compressedDataUrl;
+                    
+                    compressedImg.onload = () => {
+                        compCtx.clearRect(0, 0, compressedCanvas.width, compressedCanvas.height);
+                        compCtx.drawImage(compressedImg, 0, 0);
+                        
+                        const binary = atob(compressedDataUrl.split(',')[1]);
+                        const sizeKB = (binary.length / 1024).toFixed(2);
+                        compressedSize.textContent = `Size: ${sizeKB} KB`;
+
+                        downloadLink.href = compressedDataUrl;
+                        downloadLink.download = 'compressed-image.jpg';
+                        downloadLink.style.display = 'block';
+                    };
+                };
+            };
+
+            reader.readAsDataURL(file);
+        }
+
         // Attach Click Events to Tool Links
         document.querySelectorAll('.category li a').forEach(link => {
             link.addEventListener('click', function(event) {
@@ -864,11 +836,11 @@
 
         // Search Functionality
         const searchInput = document.getElementById('searchInput');
-        const tools = document.querySelectorAll('.category li');
+        const toolsList = document.querySelectorAll('.category li');
 
         searchInput.addEventListener('input', function(e) {
             const searchTerm = e.target.value.toLowerCase();
-            tools.forEach(tool => {
+            toolsList.forEach(tool => {
                 const text = tool.textContent.toLowerCase();
                 if (text.includes(searchTerm)) {
                     tool.style.display = 'flex';
@@ -881,6 +853,18 @@
                 category.style.display = visibleTools ? 'block' : 'none';
             });
         });
+
+        // Initialize Embedded Tools
+        window.onload = () => {
+            updateToolLinks();
+            if (isAdmin()) {
+                const adminButton = document.createElement('button');
+                adminButton.textContent = 'Manage Tools';
+                adminButton.style = 'position: fixed; bottom: 20px; right: 20px; padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 10px; cursor: pointer;';
+                adminButton.onclick = openEmbedder;
+                document.body.appendChild(adminButton);
+            }
+        };
     </script>
 </body>
 </html>
