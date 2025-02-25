@@ -352,73 +352,82 @@
             background: #2C3E50;
         }
 
-        .compressor-container {
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .compressor-header {
-            margin-bottom: 20px;
-        }
-
-        .compressor-header h1 {
-            color: var(--primary);
-            font-size: 28px;
-        }
-
-        .compressor-tool {
-            padding: 20px;
-        }
-
-        .form-group {
+        /* Tool Embedder Styles */
+        .embedder-container {
             margin: 20px 0;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: 500;
-        }
-
-        .form-group input[type="file"],
-        .form-group input[type="range"] {
-            display: block;
-            margin: 0 auto;
-        }
-
-        .image-preview {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-
-        .preview-box {
-            text-align: center;
-        }
-
-        .preview-box h3 {
-            color: var(--secondary);
-            margin-bottom: 10px;
-        }
-
-        canvas {
-            max-width: 300px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        #downloadLink {
-            display: block;
-            margin-top: 10px;
+        .dark .embedder-container {
+            background: rgba(44, 62, 80, 0.9);
+        }
+
+        .embedder-container h3 {
             color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .embedder-container textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid var(--secondary);
+            margin-bottom: 10px;
+            resize: vertical;
+        }
+
+        .embedder-container button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            background: var(--secondary);
+            color: white;
+            transition: background 0.3s ease;
+        }
+
+        .embedder-container button:hover {
+            background: var(--accent);
+        }
+
+        .tool-controls {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .tool-controls label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
             font-weight: 500;
         }
 
-        #downloadLink:hover {
-            color: var(--highlight);
+        .tool-controls button {
+            background: var(--accent);
+        }
+
+        .tool-controls button:hover {
+            background: var(--highlight);
+        }
+
+        #toolDisplay {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px dashed var(--primary);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.5);
+            min-height: 100px;
+        }
+
+        .dark #toolDisplay {
+            background: rgba(44, 62, 80, 0.5);
         }
 
         @keyframes fadeIn {
@@ -639,26 +648,9 @@
     </footer>
 
     <script>
-        // Theme Toggle
-        function toggleTheme() {
-            document.body.classList.toggle('light');
-            document.body.classList.toggle('dark');
-            const button = document.querySelector('.theme-toggle');
-            button.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
-            const toolContentDiv = document.getElementById('toolContent');
-            toolContentDiv.style.background = document.body.classList.contains('dark') ? '#2C3E50' : 'white';
-        }
-
-        // Back to Categories
-        function showCategories() {
-            document.getElementById('toolContent').style.display = 'none';
-            document.querySelector('.categories').style.display = 'grid';
-            document.querySelectorAll('.ad-space').forEach(ad => ad.style.display = 'block');
-        }
-
-        // Simulated Tool Code Storage (for demo purposes)
-        const toolCodes = {
-            'Tip Calculator': {
+        // Simulated tool storage (replace with actual backend storage in production)
+        let tools = {
+            "Tip Calculator": {
                 html: `
                     <h2>Tip Calculator</h2>
                     <div style="margin-top: 20px;">
@@ -678,11 +670,13 @@
                         }
                         const tip = (billAmount * tipPercentage) / 100;
                         const total = billAmount + tip;
-                        document.getElementById('tipResult').innerHTML = \`Tip: \$\${tip.toFixed(2)}<br>Total: \$\${total.toFixed(2)}\`;
+                        document.getElementById('tipResult').innerHTML = 'Tip: $' + tip.toFixed(2) + '<br>Total: $' + total.toFixed(2);
                     }
-                `
+                `,
+                css: '',
+                isPublic: true
             },
-            'Image Compressor': {
+            "Image Compressor": {
                 html: `
                     <div class="compressor-container">
                         <div class="compressor-header">
@@ -716,6 +710,9 @@
                     </div>
                 `,
                 js: `
+                    document.getElementById('compressionLevel').addEventListener('input', function() {
+                        document.getElementById('compressionValue').textContent = this.value;
+                    });
                     function compressImage() {
                         const imageInput = document.getElementById('imageInput');
                         const compressionLevel = document.getElementById('compressionLevel');
@@ -725,8 +722,6 @@
                         const originalSize = document.getElementById('originalSize');
                         const compressedSize = document.getElementById('compressedSize');
                         const downloadLink = document.getElementById('downloadLink');
-
-                        compressionValue.textContent = compressionLevel.value;
 
                         const file = imageInput.files[0];
                         if (!file) {
@@ -745,7 +740,7 @@
                                 originalCanvas.width = img.width;
                                 originalCanvas.height = img.height;
                                 origCtx.drawImage(img, 0, 0);
-                                originalSize.textContent = \`Size: \${(file.size / 1024).toFixed(2)} KB\`;
+                                originalSize.textContent = 'Size: ' + (file.size / 1024).toFixed(2) + ' KB';
 
                                 const quality = (100 - compressionLevel.value) / 100;
                                 const compCtx = compressedCanvas.getContext('2d');
@@ -763,7 +758,7 @@
                                     
                                     const binary = atob(compressedDataUrl.split(',')[1]);
                                     const sizeKB = (binary.length / 1024).toFixed(2);
-                                    compressedSize.textContent = \`Size: \${sizeKB} KB\`;
+                                    compressedSize.textContent = 'Size: ' + sizeKB + ' KB';
 
                                     downloadLink.href = compressedDataUrl;
                                     downloadLink.download = 'compressed-image.jpg';
@@ -774,50 +769,30 @@
 
                         reader.readAsDataURL(file);
                     }
-                    document.getElementById('compressionLevel').addEventListener('input', function() {
-                        document.getElementById('compressionValue').textContent = this.value;
-                    });
-                `
+                `,
+                css: '',
+                isPublic: true
             }
         };
 
-        // Simulated Tool Management (Public/Private Status)
-        const toolStatus = {
-            'Tip Calculator': 'public',
-            'Image Compressor': 'public'
-            // Add more tools and their status here
-        };
-
-        // Tool Code Embedder (Hidden from users, for admin use)
-        function embedToolCode(toolName, toolData, isPublic = true) {
-            if (!toolData.html) return;
-
-            // Store tool code
-            toolCodes[toolName] = {
-                html: toolData.html,
-                css: toolData.css || '',
-                js: toolData.js || ''
-            };
-            toolStatus[toolName] = isPublic ? 'public' : 'private';
-
-            // If public, attach to tool load page
-            if (isPublic) {
-                console.log(`Tool "${toolName}" embedded as public`);
-            } else {
-                console.log(`Tool "${toolName}" embedded as private`);
-            }
+        // Theme Toggle
+        function toggleTheme() {
+            document.body.classList.toggle('light');
+            document.body.classList.toggle('dark');
+            const button = document.querySelector('.theme-toggle');
+            button.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+            const toolContentDiv = document.getElementById('toolContent');
+            toolContentDiv.style.background = document.body.classList.contains('dark') ? '#2C3E50' : 'white';
         }
 
-        // Delete Tool (Hidden from users, for admin use)
-        function deleteTool(toolName) {
-            if (toolCodes[toolName]) {
-                delete toolCodes[toolName];
-                delete toolStatus[toolName];
-                console.log(`Tool "${toolName}" deleted`);
-            }
+        // Back to Categories
+        function showCategories() {
+            document.getElementById('toolContent').style.display = 'none';
+            document.querySelector('.categories').style.display = 'grid';
+            document.querySelectorAll('.ad-space').forEach(ad => ad.style.display = 'block');
         }
 
-        // Load Tool Content
+        // Load Tool Content with Embedder
         function loadToolContent(toolName, event) {
             event.preventDefault();
             const toolContentDiv = document.getElementById('toolContent');
@@ -834,25 +809,36 @@
                 <button onclick="showCategories()" style="margin-bottom: 20px; padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 10px; cursor: pointer;">Back to Tools</button>
             `;
 
-            // Check if tool code exists and is public
-            if (toolCodes[toolName] && toolStatus[toolName] === 'public') {
-                content += toolCodes[toolName].html;
+            // Embedder UI (for demo purposes, typically restricted to admins)
+            content += `
+                <div class="embedder-container">
+                    <h3>Tool Code Embedder</h3>
+                    <textarea id="htmlInput" placeholder="Paste HTML code here"></textarea>
+                    <textarea id="cssInput" placeholder="Paste CSS code here"></textarea>
+                    <textarea id="jsInput" placeholder="Paste JavaScript code here"></textarea>
+                    <button onclick="embedTool('${toolName}')">Embed Tool</button>
+                    <div class="tool-controls">
+                        <label><input type="checkbox" id="publicToggle" ${tools[toolName]?.isPublic ? 'checked' : ''} onchange="togglePublic('${toolName}')"> Public</label>
+                        <button onclick="deleteTool('${toolName}')">Delete Tool</button>
+                    </div>
+                </div>
+            `;
 
-                // Inject CSS if provided
-                if (toolCodes[toolName].css) {
-                    const style = document.createElement('style');
-                    style.textContent = toolCodes[toolName].css;
-                    document.head.appendChild(style);
-                }
-
-                // Inject JS if provided
-                if (toolCodes[toolName].js) {
-                    const script = document.createElement('script');
-                    script.textContent = toolCodes[toolName].js;
-                    document.body.appendChild(script);
+            // Display Tool
+            if (tools[toolName]) {
+                if (tools[toolName].isPublic) {
+                    content += `
+                        <div id="toolDisplay">
+                            ${tools[toolName].html}
+                        </div>
+                        <style>${tools[toolName].css}</style>
+                        <script>${tools[toolName].js}<\/script>
+                    `;
+                } else {
+                    content += `<div id="toolDisplay"><p>This tool is private and not available publicly.</p></div>`;
                 }
             } else {
-                content += `<h2>${toolName}</h2><p>Tool coming soon!</p>`;
+                content += `<div id="toolDisplay"><h2>${toolName}</h2><p>Tool coming soon! Use the embedder to add it.</p></div>`;
             }
 
             content += `
@@ -862,6 +848,41 @@
             `;
 
             toolContentDiv.innerHTML = content;
+        }
+
+        // Embed Tool Function
+        function embedTool(toolName) {
+            const htmlInput = document.getElementById('htmlInput').value;
+            const cssInput = document.getElementById('cssInput').value;
+            const jsInput = document.getElementById('jsInput').value;
+
+            if (htmlInput || cssInput || jsInput) {
+                tools[toolName] = {
+                    html: htmlInput || '<p>No HTML provided</p>',
+                    css: cssInput || '',
+                    js: jsInput || '',
+                    isPublic: document.getElementById('publicToggle').checked
+                };
+                loadToolContent(toolName, { preventDefault: () => {} });
+            } else {
+                alert('Please provide at least one code input (HTML, CSS, or JS).');
+            }
+        }
+
+        // Toggle Public/Private
+        function togglePublic(toolName) {
+            if (tools[toolName]) {
+                tools[toolName].isPublic = !tools[toolName].isPublic;
+                loadToolContent(toolName, { preventDefault: () => {} });
+            }
+        }
+
+        // Delete Tool
+        function deleteTool(toolName) {
+            if (tools[toolName] && confirm(`Are you sure you want to delete ${toolName}?`)) {
+                delete tools[toolName];
+                loadToolContent(toolName, { preventDefault: () => {} });
+            }
         }
 
         // Attach Click Events to Tool Links
@@ -874,11 +895,11 @@
 
         // Search Functionality
         const searchInput = document.getElementById('searchInput');
-        const tools = document.querySelectorAll('.category li');
+        const toolsList = document.querySelectorAll('.category li');
 
         searchInput.addEventListener('input', function(e) {
             const searchTerm = e.target.value.toLowerCase();
-            tools.forEach(tool => {
+            toolsList.forEach(tool => {
                 const text = tool.textContent.toLowerCase();
                 if (text.includes(searchTerm)) {
                     tool.style.display = 'flex';
@@ -891,10 +912,6 @@
                 category.style.display = visibleTools ? 'block' : 'none';
             });
         });
-
-        // Example Usage of Tool Code Embedder (for admin testing, not visible to users)
-        // embedToolCode('New Tool', { html: '<h2>New Tool</h2><p>Test tool content</p>', js: 'console.log("New Tool Loaded")' }, true);
-        // deleteTool('New Tool');
     </script>
 </body>
 </html>
