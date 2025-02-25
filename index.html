@@ -346,85 +346,97 @@
             margin: 0 auto;
             max-width: 800px;
             text-align: center;
+            position: relative;
         }
 
         .dark .tool-content {
             background: #2C3E50;
         }
 
-        /* Tool Embedder Styles */
-        #toolEmbedder {
-            display: none; /* Hidden by default, visible only for admins */
-            padding: 20px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 15px;
-            margin: 20px auto;
-            max-width: 800px;
-            color: white;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        #toolEmbedder h2 {
-            margin-bottom: 20px;
-            font-size: 24px;
-        }
-
-        #toolEmbedder textarea {
-            width: 100%;
-            height: 100px;
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 10px;
-            border: none;
-            resize: vertical;
-            background: rgba(255, 255, 255, 0.9);
-        }
-
-        #toolEmbedder select,
-        #toolEmbedder button {
-            padding: 10px;
-            margin: 10px 5px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            background: var(--highlight);
-            color: var(--text-light);
-        }
-
-        #toolEmbedder button:hover {
-            background: var(--accent);
-            color: white;
-        }
-
-        .embedded-tool {
-            margin-top: 20px;
-            padding: 20px;
-            border-radius: 10px;
+        /* Embedder Styles */
+        #toolEmbedderPanel {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             background: white;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 2000;
+            width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
         }
 
-        .dark .embedded-tool {
+        .dark #toolEmbedderPanel {
             background: #2C3E50;
         }
 
-        .embedded-tool h3 {
+        #toolEmbedderPanel h2 {
             color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        #toolEmbedderPanel label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: 500;
+        }
+
+        #toolEmbedderPanel textarea, #toolEmbedderPanel input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            resize: vertical;
+        }
+
+        #toolEmbedderPanel button {
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        #toolEmbedderPanel button:hover {
+            background: var(--secondary);
+        }
+
+        .tool-card {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            color: white;
+            position: relative;
+        }
+
+        .tool-card.private {
+            background: linear-gradient(135deg, #666, #999);
+            opacity: 0.8;
+        }
+
+        .tool-card h3 {
             margin-bottom: 10px;
         }
 
-        .delete-tool {
-            background: var(--accent);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
-            display: inline-block;
+        .tool-actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 10px;
         }
 
-        .delete-tool:hover {
-            background: #e65e5d;
+        .tool-actions button {
+            padding: 5px 10px;
+            font-size: 12px;
         }
 
         @keyframes fadeIn {
@@ -460,21 +472,8 @@
                 padding: 20px;
                 max-width: 100%;
             }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 10px;
-            }
-            .icon-3d {
-                width: 50px;
-                height: 50px;
-            }
-            .category h2 {
-                font-size: 18px;
-            }
-            .ad-space {
-                margin: 20px 0;
+            #toolEmbedderPanel {
+                width: 90%;
             }
         }
     </style>
@@ -502,20 +501,51 @@
             </div>
         </header>
 
-        <!-- Tool Embedder (Admin Only) -->
-        <div id="toolEmbedder">
-            <h2>Tool Code Embedder</h2>
-            <textarea id="htmlCode" placeholder="Paste HTML code here"></textarea>
-            <textarea id="cssCode" placeholder="Paste CSS code here (optional)"></textarea>
-            <textarea id="jsCode" placeholder="Paste JavaScript code here (optional)"></textarea>
-            <select id="toolVisibility">
-                <option value="public">Public</option>
-                <option value="private">Private</option>
-            </select>
-            <button onclick="embedTool()">Embed Tool</button>
+        <div id="toolContent" class="tool-content" style="display: none;">
+            <div id="adminEmbedderBtn" style="display: none; position: absolute; top: 10px; right: 10px;">
+                <button onclick="toggleEmbedder()">Tool Embedder</button>
+            </div>
+            <div id="embeddedTools"></div>
         </div>
 
-        <div id="toolContent" class="tool-content" style="display: none;"></div>
+        <div id="toolEmbedderPanel">
+            <h2>Tool Code Embedder</h2>
+            <form id="toolEmbedderForm">
+                <label for="toolName">Tool Name:</label>
+                <input type="text" id="toolName" required>
+                
+                <label for="toolType">Tool Type:</label>
+                <select id="toolType" onchange="toggleCodeInputs()">
+                    <option value="single">Single HTML File</option>
+                    <option value="separate">Separate HTML/CSS/JS</option>
+                </select>
+
+                <div id="singleCodeInput">
+                    <label for="singleCode">Complete HTML Code:</label>
+                    <textarea id="singleCode" rows="6" placeholder="Paste complete HTML code here"></textarea>
+                </div>
+
+                <div id="separateCodeInput" style="display: none;">
+                    <label for="htmlCode">HTML Code:</label>
+                    <textarea id="htmlCode" rows="4" placeholder="Paste HTML code here"></textarea>
+                    
+                    <label for="cssCode">CSS Code:</label>
+                    <textarea id="cssCode" rows="4" placeholder="Paste CSS code here"></textarea>
+                    
+                    <label for="jsCode">JavaScript Code:</label>
+                    <textarea id="jsCode" rows="4" placeholder="Paste JS code here"></textarea>
+                </div>
+
+                <label for="isPublic">Visibility:</label>
+                <select id="isPublic">
+                    <option value="true">Public</option>
+                    <option value="false">Private</option>
+                </select>
+
+                <button type="submit">Embed Tool</button>
+                <button type="button" onclick="toggleEmbedder()">Close</button>
+            </form>
+        </div>
 
         <div class="ad-space">
             <p>[AdSense Placeholder - Insert your AdSense code here]</p>
@@ -675,59 +705,137 @@
             document.querySelectorAll('.ad-space').forEach(ad => ad.style.display = 'block');
         }
 
+        // Tool Embedder Storage
+        let embeddedTools = JSON.parse(localStorage.getItem('embeddedTools')) || {};
+
+        // Admin Check (Simple example, replace with real authentication)
+        const isAdmin = true; // Set to false for visitors, implement real auth in production
+        if (isAdmin) {
+            document.getElementById('adminEmbedderBtn').style.display = 'block';
+        }
+
+        // Toggle Embedder Panel
+        function toggleEmbedder() {
+            const panel = document.getElementById('toolEmbedderPanel');
+            panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // Toggle Code Input Fields
+        function toggleCodeInputs() {
+            const toolType = document.getElementById('toolType').value;
+            document.getElementById('singleCodeInput').style.display = toolType === 'single' ? 'block' : 'none';
+            document.getElementById('separateCodeInput').style.display = toolType === 'separate' ? 'block' : 'none';
+        }
+
+        // Embed Tool
+        document.getElementById('toolEmbedderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const toolName = document.getElementById('toolName').value;
+            const toolType = document.getElementById('toolType').value;
+            const isPublic = document.getElementById('isPublic').value === 'true';
+
+            let toolData = { name: toolName, isPublic };
+
+            if (toolType === 'single') {
+                toolData.singleCode = document.getElementById('singleCode').value;
+            } else {
+                toolData.html = document.getElementById('htmlCode').value;
+                toolData.css = document.getElementById('cssCode').value;
+                toolData.js = document.getElementById('jsCode').value;
+            }
+
+            embeddedTools[toolName] = toolData;
+            localStorage.setItem('embeddedTools', JSON.stringify(embeddedTools));
+            loadToolContent(toolName, null);
+            toggleEmbedder();
+            this.reset();
+        });
+
         // Load Tool Content
         function loadToolContent(toolName, event) {
-            event.preventDefault();
+            if (event) event.preventDefault();
             const toolContentDiv = document.getElementById('toolContent');
+            const embeddedToolsDiv = document.getElementById('embeddedTools');
             const categoriesDiv = document.querySelector('.categories');
             const adSpaces = document.querySelectorAll('.ad-space');
             categoriesDiv.style.display = 'none';
             adSpaces.forEach(ad => ad.style.display = 'none');
             toolContentDiv.style.display = 'block';
+            embeddedToolsDiv.innerHTML = '';
 
             let content = `
                 <div class="ad-space" style="margin-bottom: 30px;">
-                    <p>[AdSense Placeholder - Insert your AdSense code here]</p>
+                    <p>[AdSense Placeholder]</p>
                 </div>
                 <button onclick="showCategories()" style="margin-bottom: 20px; padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 10px; cursor: pointer;">Back to Tools</button>
             `;
 
-            if (toolName === 'Tip Calculator') {
+            if (embeddedTools[toolName]) {
+                const tool = embeddedTools[toolName];
                 content += `
-                    <h2>Tip Calculator</h2>
-                    <div style="margin-top: 20px;">
-                        <label>Bill Amount: <input type="number" id="billAmount" placeholder="Enter amount" style="padding: 10px; margin: 10px 0;"></label><br>
-                        <label>Tip Percentage: <input type="number" id="tipPercentage" placeholder="Enter %" value="15" style="padding: 10px; margin: 10px 0;"></label><br>
-                        <button onclick="calculateTip()" style="padding: 10px 20px; background: var(--secondary); color: white; border: none; border-radius: 10px; cursor: pointer;">Calculate</button>
-                        <p id="tipResult" style="margin-top: 20px;"></p>
+                    <div class="tool-card ${tool.isPublic ? '' : 'private'}">
+                        <h3>${tool.name}</h3>
+                        <div class="tool-actions">
+                            ${isAdmin ? `<button onclick="toggleToolVisibility('${toolName}')">${tool.isPublic ? 'Make Private' : 'Make Public'}</button>` : ''}
+                            ${isAdmin ? `<button onclick="deleteTool('${toolName}')">Delete</button>` : ''}
+                        </div>
+                        <div class="tool-body">
+                `;
+
+                if (tool.singleCode) {
+                    content += tool.singleCode;
+                } else {
+                    content += `
+                        <style>${tool.css}</style>
+                        ${tool.html}
+                        <script>${tool.js}<\/script>
+                    `;
+                }
+
+                content += `</div></div>`;
+                if (tool.isPublic || isAdmin) {
+                    embeddedToolsDiv.innerHTML = content;
+                } else {
+                    embeddedToolsDiv.innerHTML = '<p>This tool is private.</p>';
+                }
+            } else if (toolName === 'Tip Calculator') {
+                content += `
+                    <div class="tool-card">
+                        <h3>Tip Calculator</h3>
+                        <div style="margin-top: 20px;">
+                            <label>Bill Amount: <input type="number" id="billAmount" placeholder="Enter amount" style="padding: 10px; margin: 10px 0;"></label><br>
+                            <label>Tip Percentage: <input type="number" id="tipPercentage" placeholder="Enter %" value="15" style="padding: 10px; margin: 10px 0;"></label><br>
+                            <button onclick="calculateTip()" style="padding: 10px 20px; background: var(--secondary); color: white; border: none; border-radius: 10px; cursor: pointer;">Calculate</button>
+                            <p id="tipResult" style="margin-top: 20px;"></p>
+                        </div>
                     </div>
                 `;
+                embeddedToolsDiv.innerHTML = content;
             } else {
-                // Check for embedded tools
-                const embeddedTools = JSON.parse(localStorage.getItem('embeddedTools') || '[]');
-                const tool = embeddedTools.find(t => t.name === toolName);
-                if (tool && (tool.visibility === 'public' || isAdmin())) {
-                    content += `
-                        <div class="embedded-tool">
-                            <h3>${toolName}</h3>
-                            ${tool.html}
-                            ${tool.css ? `<style>${tool.css}</style>` : ''}
-                            ${tool.js ? `<script>${tool.js}<\/script>` : ''}
-                            ${isAdmin() ? `<div class="delete-tool" onclick="deleteTool('${toolName}')">Delete Tool</div>` : ''}
-                        </div>
-                    `;
-                } else {
-                    content += `<h2>${toolName}</h2><p>Tool coming soon!</p>`;
-                }
+                content += `<h2>${toolName}</h2><p>Tool coming soon!</p>`;
+                embeddedToolsDiv.innerHTML = content;
             }
 
             content += `
                 <div class="ad-space" style="margin-top: 30px;">
-                    <p>[AdSense Placeholder - Insert your AdSense code here]</p>
+                    <p>[AdSense Placeholder]</p>
                 </div>
             `;
+            embeddedToolsDiv.innerHTML = content;
+        }
 
-            toolContentDiv.innerHTML = content;
+        // Toggle Tool Visibility
+        function toggleToolVisibility(toolName) {
+            embeddedTools[toolName].isPublic = !embeddedTools[toolName].isPublic;
+            localStorage.setItem('embeddedTools', JSON.stringify(embeddedTools));
+            loadToolContent(toolName, null);
+        }
+
+        // Delete Tool
+        function deleteTool(toolName) {
+            delete embeddedTools[toolName];
+            localStorage.setItem('embeddedTools', JSON.stringify(embeddedTools));
+            showCategories();
         }
 
         // Tip Calculator Logic
@@ -744,55 +852,6 @@
                 Tip: $${tip.toFixed(2)}<br>
                 Total: $${total.toFixed(2)}
             `;
-        }
-
-        // Tool Embedder Logic
-        function embedTool() {
-            const htmlCode = document.getElementById('htmlCode').value;
-            const cssCode = document.getElementById('cssCode').value;
-            const jsCode = document.getElementById('jsCode').value;
-            const visibility = document.getElementById('toolVisibility').value;
-            const toolName = prompt('Enter a name for this tool:');
-
-            if (!toolName || !htmlCode) {
-                alert('Please provide a tool name and HTML code.');
-                return;
-            }
-
-            const embeddedTools = JSON.parse(localStorage.getItem('embeddedTools') || '[]');
-            embeddedTools.push({
-                name: toolName,
-                html: htmlCode,
-                css: cssCode,
-                js: jsCode,
-                visibility: visibility
-            });
-            localStorage.setItem('embeddedTools', JSON.stringify(embeddedTools));
-
-            alert(`Tool "${toolName}" embedded successfully as ${visibility}!`);
-            document.getElementById('htmlCode').value = '';
-            document.getElementById('cssCode').value = '';
-            document.getElementById('jsCode').value = '';
-        }
-
-        // Delete Tool
-        function deleteTool(toolName) {
-            if (confirm(`Are you sure you want to delete "${toolName}"?`)) {
-                let embeddedTools = JSON.parse(localStorage.getItem('embeddedTools') || '[]');
-                embeddedTools = embeddedTools.filter(t => t.name !== toolName);
-                localStorage.setItem('embeddedTools', JSON.stringify(embeddedTools));
-                loadToolContent(toolName, { preventDefault: () => {} }); // Refresh tool content
-            }
-        }
-
-        // Check if user is admin (placeholder logic, replace with actual auth)
-        function isAdmin() {
-            return true; // For demo purposes; implement real admin check here
-        }
-
-        // Show Embedder for Admins Only
-        if (isAdmin()) {
-            document.getElementById('toolEmbedder').style.display = 'block';
         }
 
         // Attach Click Events to Tool Links
